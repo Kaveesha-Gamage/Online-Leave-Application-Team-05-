@@ -85,11 +85,10 @@ session_start();
                     ?>
                     </div>
                     <div class="mb-3">
-                        <input class="form-control" type="text" id="username" name="username" placeholder="Enter Username" required>
+                        <input class="form-control" type="text" id="username" name="username" placeholder="Enter Employee ID" required>
                     </div>
                     <div class="mb-3">
-                        <input class="form-control" type="password" id="password" name="password" placeholder="Enter Password"
-                            required>
+                        <input class="form-control" type="password" id="password" name="password" placeholder="Enter Password" required>
                     </div>
                     <input type="submit" class="btn btn-success" name="login" value="Log In">
                 </form>

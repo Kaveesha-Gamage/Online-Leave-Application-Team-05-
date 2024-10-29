@@ -14,7 +14,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 999;
-  background-color: #404040 !important;
+  background-color: #0f0283 !important;
 }
 
 .navbar-brand {
@@ -34,7 +34,7 @@ body {
   width: max-content;
 }
 #register:hover {
-  background-color: seagreen;
+  background-color: rgb(19, 14, 63);
   border-radius: 5px;
 }
 #logout {
@@ -110,8 +110,8 @@ body {
 
 input:focus,
 textarea:focus {
-  border: 1px solid #22cb5c !important;
-  box-shadow: 0px 0px 5px #22cb5c !important;
+  border: 1px solid #6322cb !important;
+  box-shadow: 0px 0px 5px #5d22cb !important;
 }
 .btn {
   width: 100%;
@@ -122,7 +122,7 @@ textarea:focus {
   text-align: center;
   padding: 10px;
   bottom: 0;
-  background: #404040 !important;
+  background: #070144 !important;
   bottom: 0px;
 }
 

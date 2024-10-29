@@ -48,13 +48,6 @@ else{
         <div class="container-fluid">
         
             <a class="navbar-brand" href="admin.php">Online Leave Application</a>
-            <!-- <button class="btn-default" onclick="window.location.href='leavehist.php';">Leave History</button> </div> -->
-            <!-- <nav class="nav navbar-right">
-            <a class="nav-link active" href="#">Active</a>
-            
-            </nav>
-
-            <button id="logout" onclick="window.location.href='logout.php';">Logout</button> </div> -->
 
             <ul class="nav justify-content-end">
 
@@ -81,6 +74,7 @@ else{
                   <thead>
                       <th>#</th>
                       <th>Employee</th>
+                      <th>Employee ID</th>
                       <th>Leave Application</th>
                       <th>Days</th>
                       <th>From-Date</th>
@@ -102,6 +96,7 @@ else{
                                 echo "<tr>
                                         <td>$cnt</td>
                                         <td>{$row1['ename']}</td>
+                                        <td>{$row1['empID']}</td>
                                         <td>{$row1['descr']}</td>
                                         <td>{$interval->format('%a Day/s')}</td>
                                         <td>{$datetime1->format('Y/m/d')}</td>

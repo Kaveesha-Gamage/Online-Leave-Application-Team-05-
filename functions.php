@@ -30,22 +30,22 @@
             return false;
     }
 
-    function login($username, $password, $conn){
-            $query = mysqli_query($conn, "SELECT * FROM users WHERE name='".$username."'");
+    function login($empID, $password, $conn){
+            $query = mysqli_query($conn, "SELECT * FROM users WHERE empID='".$empID."'");
 			$numrows = mysqli_num_rows($query);
 			if($numrows !=0)
 			{
 				while($row = mysqli_fetch_assoc($query))
 				{
-					$dbusername=$row['name'];
+					$dbusername=$row['empID'];
 					$dbpassword=$row['password'];
 					$type=$row['type'];
 					$id=$row['id'];
 				}
-				if($username == $dbusername && passwordCheck($password, $dbpassword))
+				if($empID == $dbusername && passwordCheck($password, $dbpassword))
 				{
 					
-					$_SESSION['sess_user']=$username;
+					$_SESSION['sess_user']=$empID;
 					$_SESSION['sess_eid']=$id;
 					//Redirect Browser
 					if($type=="admin"){
@@ -64,11 +64,11 @@
 	 		}
     }
 
-    function signup($fullname,$name,$email,$password,$phone,$repassword,$gender,$city,$dept,$type,$conn){
+    function signup($fullname,$empID,$email,$password,$phone,$repassword,$gender,$dept,$type,$conn){
         $hashedPassword = encryption($password);
 
-        $query = mysqli_query($conn,"INSERT INTO users(fullname, name, email, phone, password, gender, city, department, type) VALUES('$fullname','$name','$email','$phone','$hashedPassword','$gender','$city','$dept','$type')");
-        $query1 = mysqli_query($conn,"SELECT id from users WHERE name='".$name."'");
+        $query = mysqli_query($conn,"INSERT INTO users(fullname, empID, email, phone, password, gender, department, type) VALUES('$fullname','$empID','$email','$phone','$hashedPassword','$gender','$dept','$type')");
+        $query1 = mysqli_query($conn,"SELECT id from users WHERE empID='".$empID."'");
         $eid = mysqli_fetch_assoc($query1);
 
         if($query){
@@ -76,16 +76,16 @@
 
             echo 'Registration successful!!';
             
-            $_SESSION['sess_user'] = $name;
+            $_SESSION['sess_user'] = $empID;
             $_SESSION['sess_eid'] = $eid['id'];
 
             header("Location:leaveAplicationForm.php");
             exit;
         }
         else{
-            echo "Query Error : " . "INSERT INTO users(fullname, name, email, phone, password, gender, city, department, type) VALUES('$fullname','$name','$email','$phone','$hashedPassword','$gender','$city','$dept','$type')" . "<br>" . mysqli_error($conn);
+            echo "Query Error : " . "INSERT INTO users(fullname, empID, email, phone, password, gender, type) VALUES('$fullname','$empID','$email','$phone','$hashedPassword','$gender','$type')" . "<br>" . mysqli_error($conn);
             echo "<br>";
-            echo "Query Error : " . "SELECT id from users WHERE name='".$name."'" . "<br>" . mysqli_error($conn);
+            echo "Query Error : " . "SELECT id from users WHERE name='".$empID."'" . "<br>" . mysqli_error($conn);
         }
 
     }
