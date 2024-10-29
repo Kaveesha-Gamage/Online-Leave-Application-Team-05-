@@ -70,8 +70,8 @@ session_start();
 <body>
 <!-- php code -->
   <?php
-  $nameErr = $emailErr = $phoneErr = $passwordErr = $repasswordErr = $genderErr = "";
-  $fullname = $username = $email = $phone = $password = $repassword = $gender = "";
+  $nameErr = $empIDErr = $emailErr = $phoneErr = $passwordErr = $repasswordErr = $genderErr = "";
+  $fullname = $empID = $email = $phone = $password = $repassword = $gender = "";
   global $validate;
 
   if(isset($_POST['submit'])){
@@ -85,12 +85,12 @@ session_start();
       $validate = true;
     }
 
-    if(empty($_POST['username'])){
-      $nameErr = "Please Enter Username";
+    if(empty($_POST['empID'])){
+      $empIDErr = "Please Enter your Employee ID";
       $validate = false;
     }
     else{
-      $username = mysqli_real_escape_string($conn,$_POST['username']);
+      $empID = mysqli_real_escape_string($conn,$_POST['empID']);
       $validate = true;
     }
 
@@ -151,13 +151,13 @@ session_start();
       $validate = true;
     }
 
-    $city = $_POST['city'];
-    $dept = $_POST['Department'];
+    
+    $dept = $_POST['department'];
     $type = 'employee';
   
  
     if($validate){
-      signup($fullname,$username,$email,$password,$phone,$repassword,$gender,$city,$dept,$type,$conn);
+      signup($fullname,$empID,$email,$password,$phone,$repassword,$gender,$dept,$type,$conn);
     }
   }
 
@@ -183,18 +183,18 @@ error_reporting(E_ALL);
   
     <!--form-->
     <form method="POST" autocomplete="off">
+
+      <!--username-->
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="empID" id="empID" value="<?php echo $empID; ?>"placeholder="Employee ID">
+        <label for="empID">Employee ID</label>
+        <span class="error"><?php echo $empIDErr; ?></span>
+      </div>
   
       <!--Name-->
       <div class="form-floating mb-3">
-        <input type="text" class="form-control" name="fullname" id="fullname" value="<?php echo $fullname; ?>"placeholder="Fullname">
+        <input type="text" class="form-control" name="fullname" id="fullname" value="<?php echo $fullname; ?>"placeholder="Fullname" Required>
         <label for="Fullname">Fullname</label>
-        <span class="error"><?php echo $nameErr; ?></span>
-      </div>
-  
-      <!--username-->
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" name="username" id="username" value="<?php echo $username; ?>"placeholder="Username">
-        <label for="username">Username</label>
         <span class="error"><?php echo $nameErr; ?></span>
       </div>
   
@@ -229,51 +229,24 @@ error_reporting(E_ALL);
       <label for="gender">Gender:</label>
       <input type="radio" id="gender" name="gender" <?php if(isset($gender)&&$gender=="Male") echo "checked" ?> value="Male">Male
       <input type="radio" id="gender" name="gender" <?php if(isset($gender)&&$gender=="Female") echo "checked" ?> value="Female">Female
-      <input type="radio" id="gender" name="gender" <?php if(isset($gender)&&$gender=="Prefer Not to say") echo "checked" ?> value="Prefer Not to say">Prefer Not to say
       <span class="error"><?php echo $genderErr; ?></span>
-      <br>
-  
-      <div class="row">
-  
-      <div class="col-5">
-      <label for="city">City:</label>
-      <select id="city" name="city">
-        <option>New York</option>
-        <option>Chicago</option>
-        <option>Seattle</option>
-        <option>Boston</option>
-        <option>Miami</option>
-        <option>Austin</option>
-        <option>Los Angeles</option>
-        <option>Philadelphia</option>
-        <option>Atlanta</option>
-        <option>Nashville</option>
-        <option>San Diego</option>
-        <option>Tucson</option>
-        <option>Omaha</option>
-        <option>Memphis</option>
-      </select>
-      </div>
-  
-      <div class="col-5">
-      <label>Department : </label>
-      <select name="Department">
-        <option>Engineering</option>
-        <option>Development</option>
-        <option>IT Support</option>
-        <option>HR</option>
-        <option>Test Team</option>
-        <option>Finance</option>
-        <option>Marketing and Sales</option>
-        <option>Customer Support</option>
-      </select>
-      </div>
-  
-      </div>
-  
       
+      <div class="col-5">
+        <label>Department : </label>
+        <select name="department" required>
+          <option>Select your Department</option>
+          <option>Computer Science</option>
+          <option>Physics</option>
+          <option>Mathematics and Statistics</option>
+          <option>Chemistry</option>
+          <option>Botany</option>
+          <option>Fisheries</option>
+          <option>Zoology</option>
+        </select>
+      </div>
+
+      <br><br>
   
-      <br>
   
       <input type="submit" name="submit" value="Submit" class="btn btn-success">
     </form>
@@ -284,7 +257,7 @@ error_reporting(E_ALL);
   <!--Footer-->
   <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
   <div>
-    <p class="text-center">Online Leave Application</p>
+    <p class="text-center">&copy; Online Leave Application</p>
       <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
     </div>
   </footer>
