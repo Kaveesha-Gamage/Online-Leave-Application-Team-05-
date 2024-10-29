@@ -77,6 +77,7 @@ else{
             <table class="table table-bordered table-hover table-striped">
                 <thead>
                     <th>#</th>
+                    <th>Employee ID</th>
                     <th>Employee</th>
                     <th>Leave Application</th>
                     <th>Dates</th>
@@ -104,6 +105,7 @@ else{
                                             
                                             echo "<tr>
                                                     <td>$cnt</td>
+                                                    <td>{$row['empID']}</td>
                                                     <td>{$row['ename']}</td>
                                                     <td>{$row['descr']}</td>
                                                     <td>{$datetime1->format('Y/m/d')} <b>--</b> {$datetime2->format('Y/m/d')}</td>
