@@ -40,7 +40,6 @@ else{
       $leaveApplicationValidate = true;
     }
 
-    
     $reason = mysqli_real_escape_string($conn,$_POST['reason']);
     if(empty($reason)){
       $reasonErr = "Please give reason for the leave in detail";
@@ -50,23 +49,96 @@ else{
       $absencePlusReason = $absence." : ".$reason;
       $leaveApplicationValidate = true;
     }
+
+    if(empty($_POST['ActorDepartment'])){
+      $actIDErr = "Please Enter Actor's Department";
+      $leaveApplicationValidate = false;
+    }
+    else{
+      $ActorDepartment = mysqli_real_escape_string($conn,$_POST['ActorDepartment']);
+      $leaveApplicationValidate = true;
+    }
+
+    if(empty($_POST['ActorEmployeeID'])){
+      $actIDErr = "Please Enter Actor's EmployeeID";
+      $leaveApplicationValidate = false;
+    }
+    else{
+      $ActorEmployeeID = mysqli_real_escape_string($conn,$_POST['ActorEmployeeID']);
+      $leaveApplicationValidate = true;
+    }
+
+    if(empty($_POST['Actorfullname'])){
+      $actnameErr = "Please Enter Actor's name";
+      $leaveApplicationValidate = false;
+    }
+    else{
+      $Actorfullname = mysqli_real_escape_string($conn,$_POST['Actorfullname']);
+      $leaveApplicationValidate = true;
+    }
     
     $status = "Pending";
     
     if($leaveApplicationValidate){
-      //for eid
-      $username = $_SESSION["sess_user"];
-      $eid_query = mysqli_query($conn,"SELECT id FROM users WHERE name='".$username."'");
+      // for empID
+      $empID = $_SESSION["sess_user"]; // Updated to fetch empID from session
+      $eid_query = mysqli_query($conn, "SELECT id, email, fullname FROM users WHERE empID='" . $empID . "'");
       
       $row = mysqli_fetch_array($eid_query);
+
+      // Extract the employee's email and full name
+      $employeeEmail = $row['email'];
+      $employeeFullName = $row['fullname'];
       
-      $query = "INSERT INTO leaves(eid, ename, descr, fromdate, todate, status) VALUES({$row['id']},'{$username}','$absencePlusReason', '$fromdate', '$todate', '$status')";
+      $query = "INSERT INTO leaves(eid, empID, ename, descr, fromdate, todate, ActorDepartment, ActorEmployeeID, Actorfullname, status) VALUES({$row['id']},'{$empID}','{$employeeFullName}','$absencePlusReason', '$fromdate', '$todate', '$ActorDepartment', '$ActorEmployeeID','$Actorfullname', '$status')";
       $execute = mysqli_query($conn,$query);
       if($execute){
         echo '<script>alert("Leave Application Submitted. Please wait for approval status!")</script>';
+
+        // Send email to admin using PHPMailer
+       /* require_once "./PHPMailer/PHPMailer.php";
+        require_once "./PHPMailer/SMTP.php";
+        require_once "./PHPMailer/Exception.php";
+        require './vendor/autoload.php';
+
+        $mail = new PHPMailer\PHPMailer\PHPMailer();
+
+        // SMTP settings
+        $mail->isSMTP();
+        $mail->Host = "smtp.gmail.com"; // Or your SMTP host
+        $mail->SMTPAuth = true;
+        $mail->Username = "kvgz.1218@gmail.com"; // Replace with your email
+        $mail->Password = 'dpwv fguk escn bnmm'; // App-specific password or SMTP password
+        $mail->Port = 465;
+        $mail->SMTPSecure = "ssl";
+
+        // Email settings
+        $mail->isHTML(true);
+        $mail->setFrom($employeeEmail, $employeeFullName); // Set "From" to the employee's email and name
+        $mail->addAddress("testdata1324@gmail.com"); // Replace with the admin's email
+        $mail->Subject = "New Leave Request from $employeeFullName";
+
+        // Leave details
+        $mailContent = "<h3>New Leave Request</h3>
+            <p><b>Employee Name:</b> $employeeFullName</p>
+            <p><b>Leave Type:</b> $absence</p>
+            <p><b>From:</b> $fromdate</p>
+            <p><b>To:</b> $todate</p>
+            <p><b>Reason:</b> $reason</p>
+            <p><b>Acting Employee ID:</b> $ActorEmployeeID</p>
+            <p><b>Acting Employee Name:</b> $Actorfullname</p>
+            <p><b>Status:</b> Pending</p>";
+
+        $mail->Body = $mailContent;
+
+        if ($mail->send()) {
+            echo '<script>alert("Leave Application Submitted. Email notification sent to admin.")</script>';
+        } else {
+            echo "Email sending failed: " . $mail->ErrorInfo;
+        } */
       }
       else{
-        echo "Query Error : " . $query . "<br>" . mysqli_error($conn);;
+        echo "Query Error : " . $query . "<br>" . mysqli_error($conn);
       }
     }
   }
@@ -107,7 +179,7 @@ else{
     }
 
     label {
-      margin-top: 2em;
+      margin-top: 0.5em;
       font-size: 1.1em !important;
     }
 
@@ -124,13 +196,13 @@ else{
       margin-top: 1em;
     }
 
-    table{
+    table {
       width: 90% !important;
       margin: 1.5rem auto !important;
       font-size: 1.1em !important;
     }
 
-    .error{
+    .error {
       color: #FF0000;
     }
   </style>
@@ -144,7 +216,7 @@ else{
 
       let checkedValue = [];
       for (let i = 0; i < checkbox.length; i++) {
-        if(checkbox[i].checked === true)
+        if (checkbox[i].checked === true)
           checkedValue.push(checkbox[i].id);
       }
 
@@ -154,7 +226,7 @@ else{
         errMsg.push("Please enter the reason and date of leave");
       }
 
-      if(checkedValue.length < 1){
+      if (checkedValue.length < 1) {
         errMsg.push("Please select the type of Leave");
       }
 
@@ -172,6 +244,7 @@ else{
       }
     }
   </script>
+
 
 </head>
 
@@ -226,27 +299,9 @@ else{
         </label>
       </div>
       <div class="form-check">
-        <input class="form-check-input" name="absence[]" type="checkbox" value="Bereavement" id="Bereavement">
-        <label class="form-check-label" for="Bereavement">
-          Bereavement
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" name="absence[]" type="checkbox" value="Time off without pay" id="Time Off Without Pay">
-        <label class="form-check-label" for="Time Off Without Pay">
-          Time off without pay
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" name="absence[]" type="checkbox" value="Maternity / Paternity" id="Maternity/Paternity">
-        <label class="form-check-label" for="Maternity/Paternity">
-          Maternity / Paternity
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" name="absence[]" type="checkbox" value="Sabbatical" id="Sabbatical">
-        <label class="form-check-label" for="Sabbatical">
-          Sabbatical
+        <input class="form-check-input" name="absence[]" type="checkbox" value="Duty" id="Duty">
+        <label class="form-check-label" for="Duty">
+          Duty
         </label>
       </div>
       <div class="form-check">
@@ -254,7 +309,7 @@ else{
         <label class="form-check-label" for="Other">
           Others
         </label>
-      </div>
+      </div> <br/>
   
       <div class="mb-3 ">
         <label for="dates"><b>From -</b></label>
@@ -265,14 +320,42 @@ else{
       </div>
   
       <div class="mb-3">
-        
         <label for="leaveDesc" class="form-label"><b>Please mention reasons for your leave days :</b></label>
         <!-- error message if reason of the leave is not given -->
         <span class="error"><?php echo "&nbsp;".$reasonErr ?></span>
         <textarea class="form-control" name="reason" id="leaveDesc" rows="4" placeholder="Enter Here..."></textarea>
       </div>
+
+      <div class="mb-3">
+        <label for="adderss" class="form-label"><b> Address of the applicant during the leave : </b></label>
+        <input type="text" class="form-control" name="Address" id="Address" placeholder="Address during the leave" Required>
+      </div>
+
+      <!--Acting arrangement details-->
+      <div class="mb-3">
+        <label for="actorDepartment" class="form-label"><b> Acting employee's Department : </b></label><br/>
+        <select name="ActorDepartment" required>
+          <option>Select your Department</option>
+          <option>Computer Science</option>
+          <option>Physics</option>
+          <option>Mathematics and Statistics</option>
+          <option>Chemistry</option>
+          <option>Botany</option>
+          <option>Fisheries</option>
+          <option>Zoology</option>
+        </select>
+      </div>
   
-  
+      <div class="mb-3">
+        <label for="actorEmployeeID" class="form-label"><b> Acting employee's Employee ID : </b></label>
+        <input type="text" class="form-control" name="ActorEmployeeID" id="ActorEmployeeID" placeholder="Actor's Employee ID" Required>
+      </div>
+    
+      <div class="mb-3">
+        <label for="Fullname" class="form-label"><b> Acting employee's Fullname : </b></label><input type="text" class="form-control" name="Actorfullname" id="Actorfullname" placeholder="Actor's Fullname">
+      </div>
+      
+      <br/>
       <input type="submit" name="submit" value="Submit Leave Request" class="btn btn-success">
     </form>
   
@@ -285,14 +368,8 @@ else{
       <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
     </div>
   </footer>
-
-</body>
-
 </html>
 
 <?php
 }
-
-ini_set('display_errors', true);
-error_reporting(E_ALL);
 ?>

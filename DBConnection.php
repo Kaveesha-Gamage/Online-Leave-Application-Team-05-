@@ -1,5 +1,5 @@
 <?php
-  $conn = mysqli_connect('localhost','root','','onlineleavedb');
+  $conn = mysqli_connect('localhost','root','','leave_test');
   
   if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error."<br>");

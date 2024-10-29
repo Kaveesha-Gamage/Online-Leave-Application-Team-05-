@@ -83,9 +83,7 @@ else{
                       <th>Username</th>
                       <th>Fullname</th>
                       <th>Email</th>
-                      <th>Department</th>
                       <th>Gender</th>
-                      <th>City</th>
                       <th>Contact</th>
                       <th>Action</th>
                   </thead>
@@ -101,12 +99,10 @@ else{
                                 
                                 echo "<tr>
                                         <td>$cnt</td>
-                                        <td>{$row1['name']}</td>
+                                        <td>{$row1['empID']}</td>
                                         <td>{$row1['fullname']}</td>
                                         <td>{$row1['email']}</td>
-                                        <td>{$row1['department']}</td>
                                         <td>{$row1['gender']}</td>
-                                        <td>{$row1['city']}</td>
                                         <td>{$row1['phone']}</td>
                                         <td><a href=\"delete_emp.php?id={$row1['id']}\"><button class='btn-danger btn-sm' >Delete</button></a></td>
                                         

@@ -94,7 +94,7 @@ else{
   </nav>
 
 
-  <h1>My Leave History</h1>
+  <h1>My Leave History</h1> <br/>
 
   <div class="container">
   
@@ -137,11 +137,8 @@ else{
       </table>
   </div>
   </div>
-
   
-
 </body>
-
 </html>
 
 <?php
