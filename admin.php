@@ -48,13 +48,6 @@ else{
         <div class="container-fluid">
         
             <a class="navbar-brand" href="#">Online Leave Application</a>
-            <!-- <button class="btn-default" onclick="window.location.href='leavehist.php';">Leave History</button> </div> -->
-            <!-- <nav class="nav navbar-right">
-            <a class="nav-link active" href="#">Active</a>
-            
-            </nav>
-
-            <button id="logout" onclick="window.location.href='logout.php';">Logout</button> </div> -->
 
             <ul class="nav justify-content-end">
             <li class="nav-item">
