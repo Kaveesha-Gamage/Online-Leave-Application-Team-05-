@@ -101,7 +101,11 @@ else{
                                         <td>{$interval->format('%a Day/s')}</td>
                                         <td>{$datetime1->format('Y/m/d')}</td>
                                         <td>{$datetime2->format('Y/m/d')}</td>
-                                        <td><b>{$row1['status']}</b></td>
+                                        <td>
+                                            <b>{$row1['status']}</b>
+                                            " . ($row1['status'] === 'Rejected' && !empty($row1['rejection_reason']) ? 
+                                                "<br><small class='text-danger'>Reason: {$row1['rejection_reason']}</small>" : '') . "
+                                        </td>
                                       </tr>";
                              $cnt++; }
                             } else {
