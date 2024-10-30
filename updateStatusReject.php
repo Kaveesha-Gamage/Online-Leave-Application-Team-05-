@@ -10,8 +10,9 @@ else{
 
 $eid = $_GET['eid'];
 $descr = $_GET['descr'];
+$reason = $_GET['reason'];
 
-$add_to_db = mysqli_query($conn,"UPDATE leaves SET status='Rejected' WHERE eid='".$eid."' AND descr='".$descr."'");
+$add_to_db = mysqli_query($conn, "UPDATE leaves SET status='Rejected', rejection_reason='$reason' WHERE eid='$eid' AND descr='$descr'");
 	
 			if($add_to_db){	
 			  echo "Saved!!";

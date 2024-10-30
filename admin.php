@@ -41,6 +41,15 @@ else{
         }
     </style>
 
+    <script>
+    function rejectLeave(eid, descr) {
+        let reason = prompt("Please enter the reason for rejection:");
+        if (reason) {
+            window.location.href = `updateStatusReject.php?eid=${eid}&descr=${encodeURIComponent(descr)}&reason=${encodeURIComponent(reason)}`;
+        }
+    }
+    </script>
+
 </head>
 
 <body>
@@ -48,13 +57,6 @@ else{
         <div class="container-fluid">
         
             <a class="navbar-brand" href="#">Online Leave Application</a>
-            <!-- <button class="btn-default" onclick="window.location.href='leavehist.php';">Leave History</button> </div> -->
-            <!-- <nav class="nav navbar-right">
-            <a class="nav-link active" href="#">Active</a>
-            
-            </nav>
-
-            <button id="logout" onclick="window.location.href='logout.php';">Logout</button> </div> -->
 
             <ul class="nav justify-content-end">
             <li class="nav-item">
@@ -104,16 +106,18 @@ else{
                                             $interval = $datetime1->diff($datetime2);
                                             
                                             echo "<tr>
-                                                    <td>$cnt</td>
-                                                    <td>{$row['empID']}</td>
-                                                    <td>{$row['ename']}</td>
-                                                    <td>{$row['descr']}</td>
-                                                    <td>{$datetime1->format('Y/m/d')} <b>--</b> {$datetime2->format('Y/m/d')}</td>
-                                                    <td>{$interval->format('%a Day/s')}</td>
-                                          
-                                                    <td><a href=\"updateStatusAccept.php?eid={$row['eid']}&descr={$row['descr']}\"><button class='btn-success btn-sm' >Accept</button></a>
-                                                    <a href=\"updateStatusReject.php?eid={$row['eid']}&descr={$row['descr']}\"><button class='btn-danger btn-sm' >Reject</button></a></td>
-                                                  </tr>";  
+                                                <td>$cnt</td>
+                                                <td>{$row['empid']}</td>
+                                                <td>{$row['ename']}</td>
+                                                <td>{$row['descr']}</td>
+                                                <td>{$datetime1->format('Y/m/d')} <b>--</b> {$datetime2->format('Y/m/d')}</td>
+                                                <td>{$interval->format('%a Day/s')}</td>
+                                                <td>
+                                                    <a href='updateStatusAccept.php?eid={$row['eid']}&descr=" . urlencode($row['descr']) . "'><button class='btn-success btn-sm'>Accept</button></a>
+                                                    <a href='javascript:void(0);' onclick='rejectLeave({$row['eid']}, \"" . addslashes($row['descr']) . "\");'><button class='btn-danger btn-sm'>Reject</button></a>
+                                                </td>
+                                            </tr>";
+  
                                          $cnt++; }       
                                     }
                                 }

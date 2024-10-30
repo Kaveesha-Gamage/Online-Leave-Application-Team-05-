@@ -118,12 +118,17 @@ else{
                       $cnt=1;
                       while($row1 = mysqli_fetch_array($leaves)){
                         echo "<tr>
-                                <td>$cnt</td>
-                                <td>{$row1['descr']}</td>
-                                <td>{$row1['fromdate']}</td>
-                                <td>{$row1['todate']}</td>
-                                <td><b>{$row1['status']}</b></td>
-                              </tr>";
+                              <td>$cnt</td>
+                              <td>{$row1['descr']}</td>
+                              <td>{$row1['fromdate']}</td>
+                              <td>{$row1['todate']}</td>
+                              <td>
+                                  <b>{$row1['status']}</b>
+                                  " . ($row1['status'] === 'Rejected' && !empty($row1['rejection_reason']) ? 
+                                      "<br><small class='text-danger'>Reason: {$row1['rejection_reason']}</small>" : '') . "
+                              </td>
+                          </tr>";
+
                      $cnt++; }
                     } else {
                       echo"<tr class='text-center'><td colspan='12'><b>YOU DON'T HAVE ANY LEAVE HISTORY! PLEASE APPLY TO VIEW YOUR STATUS HERE!</b></td></tr>";
