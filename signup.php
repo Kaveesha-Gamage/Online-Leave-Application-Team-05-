@@ -223,6 +223,7 @@ error_reporting(E_ALL);
       <div class="form-floating mb-3">
         <input class="form-control" type="password" name="repassword" id="confirmPassword" value="<?php echo $repassword ?>" placeholder="Re-Enter password">
         <label for="confirmPassword">Confirm Password</label>
+       
         <span class="error"><?php echo $repasswordErr; ?></span>
       </div>
   

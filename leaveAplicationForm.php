@@ -315,7 +315,7 @@ else{
         <!-- Error message if type of absence isn't selected -->
         <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br/>
         <div class="form-check">
-            <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick">
+            <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick" required>
             <label class="form-check-label" for="Sick">Sick</label>
         </div>
         <div class="form-check">
@@ -338,11 +338,12 @@ else{
   
       <div class="mb-3 ">
         <label for="dates"><b>From -</b></label>
-        <input type="date" name="fromdate">
+        <input type="date" name="fromdate" min="<?= date('Y-m-d'); ?>" onchange="updateToDate()">
   
         <label for="dates"><b>To -</b></label>
-        <input type="date" name="todate">
+        <input type="date" name="todate" min="<?= date('Y-m-d'); ?>">
       </div>
+      
   
       <div class="mb-3">
         <label for="leaveDesc" class="form-label"><b>Please mention reasons for your leave days :</b></label>
