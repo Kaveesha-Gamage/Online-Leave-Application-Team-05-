@@ -69,7 +69,7 @@ CREATE TABLE `users` (
   `type` varchar(150) NOT NULL,
   `email` varchar(255) NOT NULL,
   `gender` varchar(150) NOT NULL,
-  `department` varchar(20) NOT NULL,
+  `department` varchar(200) NOT NULL,
   `phone` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -81,7 +81,7 @@ INSERT INTO `users` (`id`, `fullname`, `empID`, `password`, `type`, `email`, `ge
 (1, 'TEST_ADMIN', 'Admin', '$2y$10$OWEyMDU2YjUzMjdmZWI0Z.aDy53IvthsNNJHAR8lZmF4b5QR4qVwS', 'admin', 'testdata1324@gmail.com', 'Male', '', '12345678'),
 (7, 'user-1', 'E001', '$2y$10$NzM1NzAyNzMwZTJhYjA5YeMfi9IdUIkruR197l8QOPDwTAfTZFL7y', 'employee', 'testdata1324@gmail.com', 'Male', 'Computer Science', '0123456789'),
 (9, 'user-2', 'E002', '$2y$10$NDg2Yjk0YjBjZGI1NTY4MeuFeKkGhxDjfy050IQGGbK4HSG7lD4aC', 'employee', 'testdata1324@gmail.com', 'Female', 'Physics', '0123456789'),
-(10, 'user-3', 'E003', '$2y$10$ZjUyNmZhYWQ4MjJlZTJjZOpDqayEEkiOMSGoxp1vw0XozOBLSlIJu', 'employee', 'testdata1324@gmail.com', 'Female', 'Mathematics and Stat', '0123456789'),
+(10, 'user-3', 'E003', '$2y$10$ZjUyNmZhYWQ4MjJlZTJjZOpDqayEEkiOMSGoxp1vw0XozOBLSlIJu', 'employee', 'testdata1324@gmail.com', 'Female', 'Mathematics and Statistics', '0123456789'),
 (11, 'user-4', 'E004', '$2y$10$ZDdlMTcwMTgwZDU3YzJlYeAiw8o7AVCuCaGgyJV/eBCWChX3PuL4O', 'employee', 'testdata1324@gmail.com', 'Male', 'Chemistry', '0123456789'),
 (12, 'user-5', 'E005', '$2y$10$NWU1MzhjYjRhOWE3NDg4ZOKA.6QX2YIIW5wWB5Ck.mMPlfc5A3Vxa', 'employee', 'testdata1324@gmail.com', 'Male', 'Botany', '0123456789'),
 (13, 'user-6', 'E006', '$2y$10$M2Y3OTNmZjZjNzEyZThmN.IqIJaruzlKaEHakux6bujaXy8sBeqf2', 'employee', 'testdata1324@gmail.com', 'Female', 'Fisheries', '0123456789'),

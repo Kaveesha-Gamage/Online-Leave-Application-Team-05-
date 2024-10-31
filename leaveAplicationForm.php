@@ -373,7 +373,7 @@ else{
 
       <div class="mb-3">
         <label for="actorEmployeeID" class="form-label"><b> Acting employee's Employee ID : </b></label>
-        <select class="form-control" id="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
+        <select class="form-control" id="ActorEmployeeID" name="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
           <option value="">Select Employee ID</option>
         </select>
       </div>
