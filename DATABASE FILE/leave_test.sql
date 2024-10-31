@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 29, 2024 at 03:34 PM
+-- Generation Time: Oct 31, 2024 at 10:26 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `leaves` (
   `id` int(11) NOT NULL,
   `eid` int(11) NOT NULL,
-  `empid` int(11) NOT NULL COMMENT 'Employee ID',
+  `empID` varchar(255) NOT NULL,
   `ename` varchar(255) NOT NULL COMMENT 'Employee''s Username',
   `descr` varchar(255) NOT NULL COMMENT 'Leave Reason',
   `fromdate` date NOT NULL,
@@ -38,8 +38,22 @@ CREATE TABLE `leaves` (
   `ActorDepartment` varchar(255) NOT NULL,
   `ActorEmployeeID` varchar(200) NOT NULL,
   `Actorfullname` varchar(200) NOT NULL,
-  `status` varchar(255) NOT NULL
+  `status` varchar(255) NOT NULL,
+  `rejection_reason` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Dumping data for table `leaves`
+--
+
+INSERT INTO `leaves` (`id`, `eid`, `empID`, `ename`, `descr`, `fromdate`, `todate`, `ActorDepartment`, `ActorEmployeeID`, `Actorfullname`, `status`, `rejection_reason`) VALUES
+(46, 7, 'E001', 'user-1', 'Vacation : ..............', '2024-10-31', '2024-11-02', 'Select your Department', 'E002', 'abcd user ', 'Pending', NULL),
+(47, 9, 'E002', 'user-2', 'Vacation : lorem ipusm lorem ipusm lorem ipusm lorem ipusm ', '2024-11-01', '2024-11-02', 'Chemistry', 'E002', 'abcd user ', 'Accepted', NULL),
+(48, 7, 'E001', 'user-1', 'Other : reasons for your leave days', '2024-10-31', '2024-11-03', 'Computer Science', 'E002', 'user_2', 'Accepted', NULL),
+(51, 7, 'E001', 'user-1', 'Casual : casual leave under personal reason.', '2024-10-31', '2024-11-02', 'Computer Science', 'E002', 'user_2', 'Rejected', NULL),
+(52, 7, 'E001', 'user-1', 'Casual : leave request under personal reason.', '2024-11-01', '2024-11-03', 'Mathematics and Statistics', 'E003', 'user_3', 'Rejected', 'no more leaves available.'),
+(53, 7, 'E001', 'user-1', ' : lorem ipusm lorem ipusm lorem ipusm lorem ipusm ', '2024-10-24', '2024-10-31', 'Physics', '', 'user-9', 'Pending', NULL),
+(54, 7, 'E001', 'user-1', ' : lorem ipusm lorem ipusm lorem ipusm lorem ipusm ', '2024-10-24', '2024-10-31', 'Physics', '', 'user-9', 'Pending', NULL);
 
 -- --------------------------------------------------------
 
@@ -102,7 +116,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `leaves`
 --
 ALTER TABLE `leaves`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT for table `users`
