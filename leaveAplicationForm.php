@@ -9,7 +9,7 @@ else{
 ?>
 
 <?php 
-  $reasonErr = $absenceErr = "";
+  $reasonErr = $absenceErr = $absencePlusReason = $ActorEmployeeID = $absence = "";
   global $leaveApplicationValidate;
   if(isset($_POST['submit'])){
     if(empty($_POST['absence'])){
@@ -243,6 +243,40 @@ else{
         return;
       }
     }
+    function fetchEmployeeIDs(department) {
+      if (department === "Select your Department") return;
+
+      axios.get(`fetch_employee_ids.php?department=${department}`)
+        .then(response => {
+          const employeeIDField = document.getElementById('ActorEmployeeID');
+          const actorFullnameField = document.getElementById('Actorfullname');
+          employeeIDField.value = ''; // Clear previous value
+          actorFullnameField.value = ''; // Clear previous name
+
+          // Clear existing options
+          employeeIDField.innerHTML = '<option value="">Select Employee ID</option>';
+
+          // Populate employee IDs dropdown
+          response.data.forEach(emp => {
+            const option = document.createElement('option');
+            option.value = emp.empID;
+            option.textContent = emp.empID;
+            employeeIDField.appendChild(option);
+          });
+        })
+        .catch(error => console.error('Error fetching employee IDs:', error));
+    }
+
+    function fetchEmployeeName(employeeID) {
+      if (!employeeID) return;
+
+      axios.get(`fetch_employee_name.php?id=${employeeID}`)
+        .then(response => {
+          const actorFullnameField = document.getElementById('Actorfullname');
+          actorFullnameField.value = response.data.fullname; // Set full name
+        })
+        .catch(error => console.error('Error fetching employee name:', error));
+    }
   </script>
 
 
@@ -277,39 +311,30 @@ else{
     <form method="POST">
       
   
-      <label><b>Select Leave Type :</b></label>
-      <!-- error message if type of absence isn't selected -->
-      <span class="error"><?php echo "&nbsp;".$absenceErr ?></span><br/>
-      <div class="form-check">
-        <input class="form-check-input" name="absence[]" type="checkbox" value="Sick" id="Sick">
-        <label class="form-check-label" for="Sick">
-          Sick
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" name="absence[]" type="checkbox" value="Casual" id="Casual">
-        <label class="form-check-label" for="Casual">
-          Casual
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" name="absence[]" type="checkbox" value="Vacation" id="Vacation">
-        <label class="form-check-label" for="Vacation">
-          Vacation
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" name="absence[]" type="checkbox" value="Duty" id="Duty">
-        <label class="form-check-label" for="Duty">
-          Duty
-        </label>
-      </div>
-      <div class="form-check">
-        <input class="form-check-input" name="absence[]" type="checkbox" value="Other" id="Other">
-        <label class="form-check-label" for="Other">
-          Others
-        </label>
-      </div> <br/>
+    <label><b>Select Leave Type :</b></label>
+        <!-- Error message if type of absence isn't selected -->
+        <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br/>
+        <div class="form-check">
+            <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick">
+            <label class="form-check-label" for="Sick">Sick</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" name="absence[]" type="radio" value="Casual" id="Casual">
+            <label class="form-check-label" for="Casual">Casual</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" name="absence[]" type="radio" value="Vacation" id="Vacation">
+            <label class="form-check-label" for="Vacation">Vacation</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" name="absence[]" type="radio" value="Duty" id="Duty">
+            <label class="form-check-label" for="Duty">Duty</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" name="absence[]" type="radio" value="Other" id="Other">
+            <label class="form-check-label" for="Other">Others</label>
+        </div> 
+        <br/>
   
       <div class="mb-3 ">
         <label for="dates"><b>From -</b></label>
@@ -323,7 +348,7 @@ else{
         <label for="leaveDesc" class="form-label"><b>Please mention reasons for your leave days :</b></label>
         <!-- error message if reason of the leave is not given -->
         <span class="error"><?php echo "&nbsp;".$reasonErr ?></span>
-        <textarea class="form-control" name="reason" id="leaveDesc" rows="4" placeholder="Enter Here..."></textarea>
+        <textarea class="form-control" name="reason" id="leaveDesc" rows="4" placeholder="Enter Here..." required></textarea>
       </div>
 
       <div class="mb-3">
@@ -334,7 +359,7 @@ else{
       <!--Acting arrangement details-->
       <div class="mb-3">
         <label for="actorDepartment" class="form-label"><b> Acting employee's Department : </b></label><br/>
-        <select name="ActorDepartment" required>
+        <select name="ActorDepartment" onchange="fetchEmployeeIDs(this.value)" required>
           <option>Select your Department</option>
           <option>Computer Science</option>
           <option>Physics</option>
@@ -345,14 +370,17 @@ else{
           <option>Zoology</option>
         </select>
       </div>
-  
+
       <div class="mb-3">
         <label for="actorEmployeeID" class="form-label"><b> Acting employee's Employee ID : </b></label>
-        <input type="text" class="form-control" name="ActorEmployeeID" id="ActorEmployeeID" placeholder="Actor's Employee ID" Required>
+        <select class="form-control" id="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
+          <option value="">Select Employee ID</option>
+        </select>
       </div>
-    
+
       <div class="mb-3">
-        <label for="Fullname" class="form-label"><b> Acting employee's Fullname : </b></label><input type="text" class="form-control" name="Actorfullname" id="Actorfullname" placeholder="Actor's Fullname">
+        <label for="Fullname" class="form-label"><b> Acting employee's Fullname : </b></label>
+        <input type="text" class="form-control" name="Actorfullname" id="Actorfullname" placeholder="Actor's Fullname" readonly>
       </div>
       
       <br/>
