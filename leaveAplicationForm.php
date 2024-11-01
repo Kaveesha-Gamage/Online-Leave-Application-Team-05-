@@ -93,15 +93,10 @@ else{
       $query = "INSERT INTO leaves(eid, empID, ename, descr, fromdate, todate, ActorDepartment, ActorEmployeeID, Actorfullname, status) VALUES({$row['id']},'{$empID}','{$employeeFullName}','$absencePlusReason', '$fromdate', '$todate', '$ActorDepartment', '$ActorEmployeeID','$Actorfullname', '$status')";
       $execute = mysqli_query($conn,$query);
       if($execute){
-        echo '<script>alert("Leave Application Submitted. Please wait for approval status!")</script>';
-<<<<<<< Updated upstream
-=======
-        header("Location: leaveAplicationForm.php");
-        exit();
->>>>>>> Stashed changes
+        /*echo '<script>alert("Leave Application Submitted. Please wait for approval status!")</script>';*/
 
-        // Send email to admin using PHPMailer
-       /* require_once "./PHPMailer/PHPMailer.php";
+        /* // Send email to admin using PHPMailer
+        require_once "./PHPMailer/PHPMailer.php";
         require_once "./PHPMailer/SMTP.php";
         require_once "./PHPMailer/Exception.php";
         require './vendor/autoload.php';
@@ -213,41 +208,38 @@ else{
   </style>
 
   <script>
-    const validate = () => {
+const validateAndSubmit = () => {
+    let desc = document.getElementById('leaveDesc').value;
+    let errDiv = document.getElementById('err');
+    let absenceRadios = document.getElementsByName("absence[]");
+    let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
+    let errMsg = [];
 
-      let desc = document.getElementById('leaveDesc').value;
-      let checkbox = document.getElementsByClassName("form-check-input");
-      let errDiv = document.getElementById('err');
-
-      let checkedValue = [];
-      for (let i = 0; i < checkbox.length; i++) {
-        if (checkbox[i].checked === true)
-          checkedValue.push(checkbox[i].id);
-      }
-
-      let errMsg = [];
-
-      if (desc === "") {
-        errMsg.push("Please enter the reason and date of leave");
-      }
-
-      if (checkedValue.length < 1) {
-        errMsg.push("Please select the type of Leave");
-      }
-
-      if (errMsg.length > 0) {
-        errDiv.style.display = "block";
-        let msgs = "";
-
-        for (let i = 0; i < errMsg.length; i++) {
-          msgs += errMsg[i] + "<br/>";
-        }
-
-        errDiv.innerHTML = msgs;
-        scrollTo(0, 0);
-        return;
-      }
+    if (desc === "") {
+        errMsg.push("Please enter the reason for leave.");
     }
+    if (!selectedAbsence) {
+        errMsg.push("Please select the type of Leave.");
+    }
+    
+    // Validate the dates and capture any error message
+    const dateError = validateDates();
+    if (dateError) {
+        errMsg.push(dateError);
+    }
+
+    // Show error messages if any
+    if (errMsg.length > 0) {
+        errDiv.style.display = "block"; // Show the error div
+        errDiv.innerHTML = errMsg.join("<br/>"); // Set the error messages
+        scrollTo(0, 0); // Scroll to the top
+        return false; // Prevent form submission if validation fails
+    }
+
+    alert("Leave Application Submitted. Please wait for approval status!");
+    return true; // Allow form submission if validation passes
+};
+
     function fetchEmployeeIDs(department) {
       if (department === "Select your Department") return;
 
@@ -282,70 +274,17 @@ else{
         })
         .catch(error => console.error('Error fetching employee name:', error));
     }
-  </script>
-
-<<<<<<< Updated upstream
-=======
-<script>
-    function validateDates() {
+      function updateToDate() {
     const fromDate = document.querySelector('input[name="fromdate"]').value;
-    const toDate = document.querySelector('input[name="todate"]').value;
-    let errMsg = "";
+    const toDateField = document.querySelector('input[name="todate"]');
 
-    if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
-        errMsg = "The 'To' date cannot be earlier than the 'From' date.";
+    if (fromDate) {
+        // Set the minimum date for "To" date based on "From" date
+        toDateField.min = fromDate;
+    } else {
+        // If no "From" date is selected, clear the min attribute
+        toDateField.min = "";
     }
-
-    return errMsg; // Return error message if any
-}
-
-const validateAndSubmit = () => {
-    let desc = document.getElementById('leaveDesc').value;
-    let errDiv = document.getElementById('err');
-    let absenceRadios = document.getElementsByName("absence[]");
-    let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
-    let errMsg = [];
-
-    if (desc === "") {
-        errMsg.push("Please enter the reason for leave.");
-    }
-    if (!selectedAbsence) {
-        errMsg.push("Please select the type of Leave.");
-    }
-    
-    // Validate the dates and capture any error message
-    const dateError = validateDates();
-    if (dateError) {
-        errMsg.push(dateError);
-    }
-
-    // Show error messages if any
-    if (errMsg.length > 0) {
-        errDiv.style.display = "block"; // Show the error div
-        errDiv.innerHTML = errMsg.join("<br/>"); // Set the error messages
-        scrollTo(0, 0); // Scroll to the top
-        return false; // Prevent form submission if validation fails
-    }
-
-    alert("Leave Application Submitted. Please wait for approval status!");
-    return true; // Allow form submission if validation passes
-};
-
-
-  </script>
-
-  <script>
-    function updateToDate() {
-      const fromDate = document.querySelector('input[name="fromdate"]').value;
-      const toDateField = document.querySelector('input[name="todate"]');
-
-        if (fromDate) {
-            // Set the minimum date for "To" date based on "From" date
-            toDateField.min = fromDate;
-        } else {
-            // If no "From" date is selected, clear the min attribute
-            toDateField.min = "";
-        }
 }
 
 function validateDates() {
@@ -359,12 +298,7 @@ function validateDates() {
 
     return errMsg; // Return error message if any
 }
-
-
   </script>
-
->>>>>>> Stashed changes
-
 </head>
 
 <body>
@@ -381,28 +315,22 @@ function validateDates() {
             <button id="logout" onclick="window.location.href='logout.php';">Logout</button>
             </li>
             </ul>
-
-      
     </div>
   </nav>
-
 
   <h1>Leave Application</h1>
 
   <div class="container">
   <div class="alert alert-danger" id="err" role="alert" style="display: none;">
-  </div>
+</div>
 
-  
-  <form method="POST" onsubmit="return validateAndSubmit();">
+<form method="POST" onsubmit="return validateAndSubmit();">
 
-      
-  
     <label><b>Select Leave Type :</b></label>
         <!-- Error message if type of absence isn't selected -->
         <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br/>
         <div class="form-check">
-            <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick">
+            <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick" required>
             <label class="form-check-label" for="Sick">Sick</label>
         </div>
         <div class="form-check">
@@ -423,15 +351,6 @@ function validateDates() {
         </div> 
         <br/>
   
-<<<<<<< Updated upstream
-      <div class="mb-3 ">
-        <label for="dates"><b>From -</b></label>
-        <input type="date" name="fromdate">
-  
-        <label for="dates"><b>To -</b></label>
-        <input type="date" name="todate">
-      </div>
-=======
         <div class="mb-3">
           <label for="dates"><b>From -</b></label>
           <input type="date" name="fromdate" onchange="updateToDate()" required>
@@ -441,7 +360,6 @@ function validateDates() {
         </div>
 
       
->>>>>>> Stashed changes
   
       <div class="mb-3">
         <label for="leaveDesc" class="form-label"><b>Please mention reasons for your leave days :</b></label>
@@ -472,7 +390,7 @@ function validateDates() {
 
       <div class="mb-3">
         <label for="actorEmployeeID" class="form-label"><b> Acting employee's Employee ID : </b></label>
-        <select class="form-control" id="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
+        <select class="form-control" id="ActorEmployeeID" name="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
           <option value="">Select Employee ID</option>
         </select>
       </div>
