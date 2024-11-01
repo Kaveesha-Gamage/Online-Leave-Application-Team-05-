@@ -27,4 +27,3 @@ $add_to_db = mysqli_query($conn, "UPDATE leaves SET status='Rejected', rejection
 	error_reporting(E_ALL);  
 		 
 ?>
-
