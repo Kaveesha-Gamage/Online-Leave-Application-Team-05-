@@ -4,25 +4,33 @@ require_once("DBConnection.php");
 session_start();
 
 if(!isset($_SESSION["sess_user"])){
-	header("Location: index.php");
-  }
-else{
+    header("Location: index.php");
+    exit(); // Ensure no further code is executed after redirection
+} else {
+    // Get parameters and escape them
+    $eid = $_GET['eid'];
+    $descr = $_GET['descr'];
 
-	$eid = $_GET['eid'];
-	$descr = $_GET['descr'];
+    // Prepare the SQL statement
+    $stmt = $conn->prepare("UPDATE leaves SET status='Accepted' WHERE eid=? AND descr=?");
+    
+    // Bind parameters to the statement
+    $stmt->bind_param("ss", $eid, $descr); // 'ss' means both are strings
 
-	$add_to_db = mysqli_query($conn,"UPDATE leaves SET status='Accepted' WHERE eid='".$eid."' AND descr='".$descr."'");
+    // Execute the statement
+    if($stmt->execute()){
+        echo 'Saved!!';
+        header("Location: admin.php");
+        exit(); // Ensure no further code is executed after redirection
+    } else {
+        echo "Query Error: " . $stmt->error; // Output the error
+    }
 
-				if($add_to_db){	
-					echo 'Saved!!';
-					header("Location: admin.php");
-				}
-				else{
-					echo "Query Error : " . "UPDATE leaves SET status='Accepted' WHERE eid='".$eid."' AND descr='".$descr."'" . "<br>" . mysqli_error($conn);
-				}
-	}
+    // Close the statement
+    $stmt->close();
+}
 
-	ini_set('display_errors', true);
-	error_reporting(E_ALL);  
-         
+// Display errors
+ini_set('display_errors', true);
+error_reporting(E_ALL);
 ?>

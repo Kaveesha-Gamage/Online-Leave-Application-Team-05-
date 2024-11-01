@@ -183,19 +183,19 @@ error_reporting(E_ALL);
   
     <!--form-->
     <form method="POST" autocomplete="off">
-  
+      
+      <!--Employee ID-->
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" name="empID" id="empID" value="<?php echo $empID; ?>"placeholder="Employee ID" required>
+        <label for="empID">Employee ID</label>
+        <span class="error"><?php echo $empIDErr; ?></span>
+      </div>
+
       <!--Name-->
       <div class="form-floating mb-3">
         <input type="text" class="form-control" name="fullname" id="fullname" value="<?php echo $fullname; ?>"placeholder="Fullname" Required>
         <label for="Fullname">Fullname</label>
         <span class="error"><?php echo $nameErr; ?></span>
-      </div>
-  
-      <!--username-->
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" name="empID" id="empID" value="<?php echo $empID; ?>"placeholder="Employee ID">
-        <label for="empID">Employee ID</label>
-        <span class="error"><?php echo $empIDErr; ?></span>
       </div>
   
       <!--Email id-->
