@@ -73,7 +73,7 @@ else{
                 <div class="col-md-4">
                     <select name="status" class="form-control">
                         <option value="">Select Status</option>
-                        <option value="Approved" <?php if(isset($_GET['status']) && $_GET['status'] == "Approved") echo 'selected'; ?>>Approved</option>
+                        <option value="accepted" <?php if(isset($_GET['status']) && $_GET['status'] == "accepted") echo 'accepted'; ?>>accepted</option>
                         <option value="Pending" <?php if(isset($_GET['status']) && $_GET['status'] == "Pending") echo 'selected'; ?>>Pending</option>
                         <option value="Rejected" <?php if(isset($_GET['status']) && $_GET['status'] == "Rejected") echo 'selected'; ?>>Rejected</option>
                     </select>

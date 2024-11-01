@@ -208,40 +208,38 @@ else{
   </style>
 
   <script>
-    const validate = () => {
+const validateAndSubmit = () => {
     let desc = document.getElementById('leaveDesc').value;
     let errDiv = document.getElementById('err');
-
-    // Get the radio buttons for absence
     let absenceRadios = document.getElementsByName("absence[]");
     let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
-
     let errMsg = [];
 
     if (desc === "") {
-      errMsg.push("Please enter the reason for leave.");
+        errMsg.push("Please enter the reason for leave.");
     }
-
     if (!selectedAbsence) {
-      errMsg.push("Please select the type of Leave.");
+        errMsg.push("Please select the type of Leave.");
+    }
+    
+    // Validate the dates and capture any error message
+    const dateError = validateDates();
+    if (dateError) {
+        errMsg.push(dateError);
     }
 
     // Show error messages if any
     if (errMsg.length > 0) {
-      errDiv.style.display = "block";
-      let msgs = "";
-
-      for (let i = 0; i < errMsg.length; i++) {
-        msgs += errMsg[i] + "<br/>";
-      }
-
-      errDiv.innerHTML = msgs;
-      scrollTo(0, 0);
-      return false; // Prevent form submission
+        errDiv.style.display = "block"; // Show the error div
+        errDiv.innerHTML = errMsg.join("<br/>"); // Set the error messages
+        scrollTo(0, 0); // Scroll to the top
+        return false; // Prevent form submission if validation fails
     }
 
-    return true; // Allow form submission
-  }
+    alert("Leave Application Submitted. Please wait for approval status!");
+    return true; // Allow form submission if validation passes
+};
+
     function fetchEmployeeIDs(department) {
       if (department === "Select your Department") return;
 
@@ -276,60 +274,31 @@ else{
         })
         .catch(error => console.error('Error fetching employee name:', error));
     }
-  </script>
-
-<script>
-    const validateAndSubmit = () => {
-        let desc = document.getElementById('leaveDesc').value;
-        let errDiv = document.getElementById('err');
-        let absenceRadios = document.getElementsByName("absence[]");
-        let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
-        let errMsg = [];
-
-        if (desc === "") {
-            errMsg.push("Please enter the reason for leave.");
-        }
-        if (!selectedAbsence) {
-            errMsg.push("Please select the type of Leave.");
-        }
-        
-        if (errMsg.length > 0) {
-            errDiv.style.display = "block";
-            errDiv.innerHTML = errMsg.join("<br/>");
-            scrollTo(0, 0);
-            return false; // Prevent form submission if validation fails
-        }
-
-        alert("Leave Application Submitted. Please wait for approval status!");
-        return true; // Allow form submission if validation passes
-    };
-  </script>
-
-  <script>
       function updateToDate() {
-          // Get the selected "From" date
-          const fromDate = document.querySelector('input[name="fromdate"]').value;
-          const toDateField = document.querySelector('input[name="todate"]');
+    const fromDate = document.querySelector('input[name="fromdate"]').value;
+    const toDateField = document.querySelector('input[name="todate"]');
 
-          if (fromDate) {
-              // Set the minimum date for "To" date based on "From" date
-              toDateField.min = fromDate;
-          }
-      }
+    if (fromDate) {
+        // Set the minimum date for "To" date based on "From" date
+        toDateField.min = fromDate;
+    } else {
+        // If no "From" date is selected, clear the min attribute
+        toDateField.min = "";
+    }
+}
 
-      function validateDates() {
-          const fromDate = document.querySelector('input[name="fromdate"]').value;
-          const toDate = document.querySelector('input[name="todate"]').value;
-          
-          if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
-              alert("The 'To' date cannot be earlier than the 'From' date.");
-              return false; // Prevent form submission
-          }
-          return true; // Allow form submission if dates are valid
-      }
+function validateDates() {
+    const fromDate = document.querySelector('input[name="fromdate"]').value;
+    const toDate = document.querySelector('input[name="todate"]').value;
+    let errMsg = "";
+
+    if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
+        errMsg = "The 'To' date cannot be earlier than the 'From' date.";
+    }
+
+    return errMsg; // Return error message if any
+}
   </script>
-
-
 </head>
 
 <body>
@@ -346,21 +315,17 @@ else{
             <button id="logout" onclick="window.location.href='logout.php';">Logout</button>
             </li>
             </ul>
-
-      
     </div>
   </nav>
-
 
   <h1>Leave Application</h1>
 
   <div class="container">
-    <div class="alert alert-danger" id="err" role="alert">
-    </div>
-  
-    <form method="POST">
-      
-  
+  <div class="alert alert-danger" id="err" role="alert" style="display: none;">
+</div>
+
+<form method="POST" onsubmit="return validateAndSubmit();">
+
     <label><b>Select Leave Type :</b></label>
         <!-- Error message if type of absence isn't selected -->
         <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br/>
@@ -386,13 +351,14 @@ else{
         </div> 
         <br/>
   
-      <div class="mb-3 ">
-        <label for="dates"><b>From -</b></label>
-        <input type="date" name="fromdate" min="<?= date('Y-m-d'); ?>" onchange="updateToDate()">
-  
-        <label for="dates"><b>To -</b></label>
-        <input type="date" name="todate" min="<?= date('Y-m-d'); ?>">
-      </div>
+        <div class="mb-3">
+          <label for="dates"><b>From -</b></label>
+          <input type="date" name="fromdate" onchange="updateToDate()" required>
+
+          <label for="dates"><b>To -</b></label>
+          <input type="date" name="todate" id="todate" required>
+        </div>
+
       
   
       <div class="mb-3">
