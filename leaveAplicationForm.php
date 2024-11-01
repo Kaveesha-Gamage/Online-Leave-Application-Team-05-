@@ -93,7 +93,7 @@ else{
       $query = "INSERT INTO leaves(eid, empID, ename, descr, fromdate, todate, ActorDepartment, ActorEmployeeID, Actorfullname, status) VALUES({$row['id']},'{$empID}','{$employeeFullName}','$absencePlusReason', '$fromdate', '$todate', '$ActorDepartment', '$ActorEmployeeID','$Actorfullname', '$status')";
       $execute = mysqli_query($conn,$query);
       if($execute){
-        echo '<script>alert("Leave Application Submitted. Please wait for approval status!")</script>';
+        /*echo '<script>alert("Leave Application Submitted. Please wait for approval status!")</script>';*/
 
         // Send email to admin using PHPMailer
        /* require_once "./PHPMailer/PHPMailer.php";
@@ -279,6 +279,57 @@ else{
     }
   </script>
 
+<script>
+    const validateAndSubmit = () => {
+        let desc = document.getElementById('leaveDesc').value;
+        let errDiv = document.getElementById('err');
+        let absenceRadios = document.getElementsByName("absence[]");
+        let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
+        let errMsg = [];
+
+        if (desc === "") {
+            errMsg.push("Please enter the reason for leave.");
+        }
+        if (!selectedAbsence) {
+            errMsg.push("Please select the type of Leave.");
+        }
+        
+        if (errMsg.length > 0) {
+            errDiv.style.display = "block";
+            errDiv.innerHTML = errMsg.join("<br/>");
+            scrollTo(0, 0);
+            return false; // Prevent form submission if validation fails
+        }
+
+        alert("Leave Application Submitted. Please wait for approval status!");
+        return true; // Allow form submission if validation passes
+    };
+  </script>
+
+  <script>
+      function updateToDate() {
+          // Get the selected "From" date
+          const fromDate = document.querySelector('input[name="fromdate"]').value;
+          const toDateField = document.querySelector('input[name="todate"]');
+
+          if (fromDate) {
+              // Set the minimum date for "To" date based on "From" date
+              toDateField.min = fromDate;
+          }
+      }
+
+      function validateDates() {
+          const fromDate = document.querySelector('input[name="fromdate"]').value;
+          const toDate = document.querySelector('input[name="todate"]').value;
+          
+          if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
+              alert("The 'To' date cannot be earlier than the 'From' date.");
+              return false; // Prevent form submission
+          }
+          return true; // Allow form submission if dates are valid
+      }
+  </script>
+
 
 </head>
 
@@ -308,14 +359,14 @@ else{
     <div class="alert alert-danger" id="err" role="alert">
     </div>
   
-    <form method="POST">
+    <form method="POST" onsubmit="return validateAndSubmit() && validateDates();">
       
   
     <label><b>Select Leave Type :</b></label>
         <!-- Error message if type of absence isn't selected -->
         <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br/>
         <div class="form-check">
-            <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick">
+            <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick" required>
             <label class="form-check-label" for="Sick">Sick</label>
         </div>
         <div class="form-check">
@@ -338,11 +389,12 @@ else{
   
       <div class="mb-3 ">
         <label for="dates"><b>From -</b></label>
-        <input type="date" name="fromdate">
+        <input type="date" name="fromdate" min="<?= date('Y-m-d'); ?>" onchange="updateToDate()">
   
         <label for="dates"><b>To -</b></label>
-        <input type="date" name="todate">
+        <input type="date" name="todate" min="<?= date('Y-m-d'); ?>">
       </div>
+      
   
       <div class="mb-3">
         <label for="leaveDesc" class="form-label"><b>Please mention reasons for your leave days :</b></label>
