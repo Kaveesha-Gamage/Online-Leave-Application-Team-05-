@@ -93,7 +93,9 @@ else{
       $query = "INSERT INTO leaves(eid, empID, ename, descr, fromdate, todate, ActorDepartment, ActorEmployeeID, Actorfullname, status) VALUES({$row['id']},'{$empID}','{$employeeFullName}','$absencePlusReason', '$fromdate', '$todate', '$ActorDepartment', '$ActorEmployeeID','$Actorfullname', '$status')";
       $execute = mysqli_query($conn,$query);
       if($execute){
-        /*echo '<script>alert("Leave Application Submitted. Please wait for approval status!")</script>';*/
+        echo '<script>alert("Leave Application Submitted. Please wait for approval status!")</script>';
+        header("Location: leaveAplicationForm.php");
+        exit();
 
         /* // Send email to admin using PHPMailer
         require_once "./PHPMailer/PHPMailer.php";
