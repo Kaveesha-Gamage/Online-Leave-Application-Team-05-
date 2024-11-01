@@ -95,8 +95,8 @@ else{
       if($execute){
         /*echo '<script>alert("Leave Application Submitted. Please wait for approval status!")</script>';*/
 
-        // Send email to admin using PHPMailer
-       /* require_once "./PHPMailer/PHPMailer.php";
+        /* // Send email to admin using PHPMailer
+        require_once "./PHPMailer/PHPMailer.php";
         require_once "./PHPMailer/SMTP.php";
         require_once "./PHPMailer/Exception.php";
         require './vendor/autoload.php';
@@ -209,40 +209,39 @@ else{
 
   <script>
     const validate = () => {
+    let desc = document.getElementById('leaveDesc').value;
+    let errDiv = document.getElementById('err');
 
-      let desc = document.getElementById('leaveDesc').value;
-      let checkbox = document.getElementsByClassName("form-check-input");
-      let errDiv = document.getElementById('err');
+    // Get the radio buttons for absence
+    let absenceRadios = document.getElementsByName("absence[]");
+    let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
 
-      let checkedValue = [];
-      for (let i = 0; i < checkbox.length; i++) {
-        if (checkbox[i].checked === true)
-          checkedValue.push(checkbox[i].id);
-      }
+    let errMsg = [];
 
-      let errMsg = [];
-
-      if (desc === "") {
-        errMsg.push("Please enter the reason and date of leave");
-      }
-
-      if (checkedValue.length < 1) {
-        errMsg.push("Please select the type of Leave");
-      }
-
-      if (errMsg.length > 0) {
-        errDiv.style.display = "block";
-        let msgs = "";
-
-        for (let i = 0; i < errMsg.length; i++) {
-          msgs += errMsg[i] + "<br/>";
-        }
-
-        errDiv.innerHTML = msgs;
-        scrollTo(0, 0);
-        return;
-      }
+    if (desc === "") {
+      errMsg.push("Please enter the reason for leave.");
     }
+
+    if (!selectedAbsence) {
+      errMsg.push("Please select the type of Leave.");
+    }
+
+    // Show error messages if any
+    if (errMsg.length > 0) {
+      errDiv.style.display = "block";
+      let msgs = "";
+
+      for (let i = 0; i < errMsg.length; i++) {
+        msgs += errMsg[i] + "<br/>";
+      }
+
+      errDiv.innerHTML = msgs;
+      scrollTo(0, 0);
+      return false; // Prevent form submission
+    }
+
+    return true; // Allow form submission
+  }
     function fetchEmployeeIDs(department) {
       if (department === "Select your Department") return;
 
@@ -359,7 +358,7 @@ else{
     <div class="alert alert-danger" id="err" role="alert">
     </div>
   
-    <form method="POST" onsubmit="return validateAndSubmit() && validateDates();">
+    <form method="POST">
       
   
     <label><b>Select Leave Type :</b></label>
@@ -425,7 +424,7 @@ else{
 
       <div class="mb-3">
         <label for="actorEmployeeID" class="form-label"><b> Acting employee's Employee ID : </b></label>
-        <select class="form-control" id="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
+        <select class="form-control" id="ActorEmployeeID" name="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
           <option value="">Select Employee ID</option>
         </select>
       </div>
