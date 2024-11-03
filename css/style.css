@@ -7,7 +7,7 @@
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  height: 100vh;
+  height: 100vh !important;
 }
 
 .header-nav {
@@ -15,12 +15,14 @@ body {
   top: 0;
   z-index: 999;
   background-color: #0f0283 !important;
+  /* padding-left: 2rem;
+  padding-right: 2rem; */
 }
 
 .navbar-brand {
   font-size: 1.5em;
   color: white !important;
-  font-weight: 400;
+  font-weight: 500;
 }
 #register,
 #logout {
@@ -30,7 +32,7 @@ body {
   color: white;
   font-size: 1.2em;
   margin: auto 15px;
-  font-weight: 400;
+  font-weight: 500;
   width: max-content;
 }
 #register:hover {
@@ -72,31 +74,37 @@ body {
 .row {
   margin-top: 20px;
 }
-.leftComponent {
+/* .leftComponent {
   width: 48vw;
   height: 450px;
   margin: 10px;
-}
+} */
 .leftComponent img {
+  object-fit: contain;
+  padding: 20px;
   height: 100%;
   width: 100%;
 }
 
 .rightComponent {
-  width: 45vw;
+  /* width: 45vw;
   height: 450px;
-  margin: 10px;
+  margin: 10px; */
 }
 
 .rightComponent h3 {
   text-align: center;
-  font-size: 1.6em;
-  margin-top: 25vh;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #070144;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 .rightComponent hr {
-  width: 80%;
-  border: 1px solid black;
+  width: 65%;
+  border: 1px solid rgb(177, 177, 177);
   margin: auto;
+  margin-bottom: 1.5rem;
 }
 .loginForm {
   margin: 10px;
@@ -120,10 +128,15 @@ textarea:focus {
 .footer {
   width: 100%;
   text-align: center;
-  padding: 10px;
-  bottom: 0;
-  background: #070144 !important;
+  padding: 5px;
   bottom: 0px;
+  background: #070144 !important;
+  position: fixed;
+}
+
+.footer p {
+  margin: auto;
+  justify-content: center;
 }
 
 .footer > div {

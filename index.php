@@ -45,7 +45,7 @@ session_start();
 
     <!-- header -->
     <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
+        <div class="container">
             <a class="navbar-brand" href="#">Online Leave Application</a>
 
             <a id="register" href="signup.php">Sign Up</a>
@@ -57,43 +57,44 @@ session_start();
    
 
     <!-- body -->
-    <div class="container-fluid">
-        <div class="row">
-
-            <!-- leftComponent -->
-            <div class="leftComponent col-md-5">
-                <img src="img/front-img2.png" alt="Leave Image" class="img-fluid">
-            </div>
-            <!-- leftComponent ends -->
-
-
+    <div class="container">
+        <div class="row gx-3">
             <!-- rightComponent -->
-            <div class="rightComponent col-md-5">
-
-                <h3>Please login to continue. . .</h3>
-                <hr>
-                <form method="POST" class="loginForm">
-                <div class="alert alert-danger" id="invalidMsg">
-                    <?php      
-                        if(isset($_POST['login'])){
-                            if($login == false)
-                                echo "<script type='text/javascript'>document.getElementById('invalidMsg').style.display = 'block';</script>";
-                                echo "Invalid Username or Password";
-                        }
-                        else
-                            echo "";
-                    ?>
-                    </div>
-                    <div class="mb-3">
-                        <input class="form-control" type="text" id="username" name="username" placeholder="Enter Employee ID" required>
-                    </div>
-                    <div class="mb-3">
-                        <input class="form-control" type="password" id="password" name="password" placeholder="Enter Password" required>
-                    </div>
-                    <input type="submit" class="btn btn-success" name="login" value="Log In">
-                </form>
+            <div class="rightComponent col-md-7 d-flex justify-content-center align-items-center">
+                <div class="loginCard container ">
+                    <h3 >Welcome !</h3>
+                    <hr>
+                    <form method="POST" class="loginForm ">
+                    <div class="alert alert-danger" id="invalidMsg">
+                        <?php
+                            if(isset($_POST['login'])){
+                                if($login == false)
+                                    echo "<script type='text/javascript'>document.getElementById('invalidMsg').style.display = 'block';</script>";
+                                    echo "Invalid Username or Password";
+                            }
+                            else
+                                echo "";
+                        ?>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input class="form-control" type="text" id="username" name="username" placeholder="Enter Employee ID" required>
+                            <label for="username">Username</label>
+                        </div>
+                        <div class="mb-3 form-floating">
+                            <input class="form-control" type="password" id="password" name="password" placeholder="Enter Password" required>
+                            <label for="password">Password</label>
+                        </div>
+                        <input type="submit" class="btn btn-lg btn-success" name="login" value="Log In">
+                    </form>
+                </div>
             </div>
             <!-- rightComponent ends -->
+
+            <!-- leftComponent -->
+            <div class="leftComponent col-md-5 d-flex justify-content-center align-items-center" >
+                <img src="img/front-img2_resized.png" alt="Leave Image" class="img">
+            </div>
+            <!-- leftComponent ends -->
         </div>
     </div>
     <!-- body ends -->
@@ -101,10 +102,10 @@ session_start();
 
 
     <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
-    <div>
-      <p class="text-center">Online Leave Application</p>
-      <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
-    </div>
+        <div>
+        <p class="text-center">Online Leave Application</p>
+        <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
+        </div>
     </footer>
 </body>
 </html>

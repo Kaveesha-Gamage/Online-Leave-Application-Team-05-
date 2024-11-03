@@ -21,13 +21,13 @@ session_start();
   <style>
     h1 {
       text-align: center;
-      font-size: 2.5em;
+      font-size: 2rem;
       font-weight: bold;
-      padding-top: 1.2em;
+      padding-top: 1.5rem;
     }
 
     form {
-      padding: 40px;
+      padding: 30px;
     }
 
     input,
@@ -37,8 +37,8 @@ session_start();
       outline: none;
     }
 
-    input[type=radio],
-    select {
+    input[type=radio]
+    {
       width: max-content;
       padding: 5px;
       margin-top: 20px;
@@ -168,14 +168,14 @@ error_reporting(E_ALL);
 
   <!-- navbar -->
   <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+    <div class="container">
       <a class="navbar-brand" href="#">Online Leave Application</a>
 
-      <a id="register" href="index.php">Home</a>
+      <a id="register" href="index.php">Login</a>
     </div>
   </nav>
 
-  <h1>Registration Form</h1>
+  <h1>Let's Register</h1>
 
   <div class="container">
     <div class="alert alert-danger" id="err" role="alert">
@@ -226,36 +226,40 @@ error_reporting(E_ALL);
         <span class="error"><?php echo $repasswordErr; ?></span>
       </div>
   
-      <label for="gender">Gender:</label>
-      <input type="radio" id="gender" name="gender" <?php if(isset($gender)&&$gender=="Male") echo "checked" ?> value="Male">Male
-      <input type="radio" id="gender" name="gender" <?php if(isset($gender)&&$gender=="Female") echo "checked" ?> value="Female">Female
-      <span class="error"><?php echo $genderErr; ?></span>
-      
-      <div class="col-5">
-        <label>Department : </label>
-        <select name="department" required>
-          <option>Select your Department</option>
-          <option>Computer Science</option>
-          <option>Physics</option>
-          <option>Mathematics and Statistics</option>
-          <option>Chemistry</option>
-          <option>Botany</option>
-          <option>Fisheries</option>
-          <option>Zoology</option>
-        </select>
+      <div class="row row-cols-1 row-cols-lg-2">
+        <div class="col">
+          <label for="gender">Gender:</label>
+          <input type="radio" id="gender" name="gender" <?php if(isset($gender)&&$gender=="Male") echo "checked" ?> value="Male">Male
+          <input type="radio" id="gender" name="gender" <?php if(isset($gender)&&$gender=="Female") echo "checked" ?> value="Female">Female
+          <span class="error"><?php echo $genderErr; ?></span>
+        </div>
+        
+        <div class="col">
+          <select name="department" required class="form-select form-select-lg">
+            <option>Select your Department</option>
+            <option>Computer Science</option>
+            <option>Physics</option>
+            <option>Mathematics and Statistics</option>
+            <option>Chemistry</option>
+            <option>Botany</option>
+            <option>Fisheries</option>
+            <option>Zoology</option>
+          </select>
+          <!-- <label>Department : </label> -->
+        </div>
       </div>
 
-      <br><br>
+      <br>
   
   
-      <input type="submit" name="submit" value="Submit" class="btn btn-success">
+      <input type="submit" name="submit" value="Submit" class="btn btn-lg btn-success">
     </form>
   </div>
 
 
 
   <!--Footer-->
-  <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
+  <footer class="footer bg-light" style="color:white;">
   <div>
     <p class="text-center">&copy; Online Leave Application</p>
       <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
