@@ -37,7 +37,7 @@ session_start();
       outline: none;
     }
 
-    input[type=radio]
+    /* input[type=radio]
     {
       width: max-content;
       padding: 5px;
@@ -45,7 +45,7 @@ session_start();
       margin-bottom: 20px;
       margin-left: 30px;
       margin-right: 5px;
-    }
+    } */
 
     textarea {
       height: 80px;
@@ -229,8 +229,10 @@ error_reporting(E_ALL);
       <div class="row row-cols-1 row-cols-lg-2">
         <div class="col">
           <label for="gender">Gender:</label>
-          <input type="radio" id="gender" name="gender" <?php if(isset($gender)&&$gender=="Male") echo "checked" ?> value="Male">Male
-          <input type="radio" id="gender" name="gender" <?php if(isset($gender)&&$gender=="Female") echo "checked" ?> value="Female">Female
+          <input type="radio" id="gender" name="gender" class="form-check-input" <?php if(isset($gender)&&$gender=="Male") echo "checked" ?> value="Male">
+          <label for="male" class="form-check-label">Male</label> 
+          <input type="radio" id="gender" name="gender" class="form-check-input" <?php if(isset($gender)&&$gender=="Female") echo "checked" ?> value="Female">Female
+          <label for="female" class="form-check-label">Female</label> 
           <span class="error"><?php echo $genderErr; ?></span>
         </div>
         
