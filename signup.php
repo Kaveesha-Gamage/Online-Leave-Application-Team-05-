@@ -263,7 +263,7 @@ error_reporting(E_ALL);
   <!--Footer-->
   <footer class="footer bg-light" style="color:white;">
   <div>
-    <p class="text-center">&copy; Online Leave Application</p>
+    <!-- <p class="text-center">&copy; Online Leave Application</p> -->
       <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
     </div>
   </footer>

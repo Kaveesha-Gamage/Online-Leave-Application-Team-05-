@@ -103,7 +103,7 @@ session_start();
 
     <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
         <div>
-        <p class="text-center">Online Leave Application</p>
+        <!-- <p class="text-center">Online Leave Application</p> -->
         <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
         </div>
     </footer>

@@ -33,7 +33,7 @@ else{
 </head>
 
 <body>
-    <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
+    <!-- <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="admin.php">Online Leave Application</a>
             <ul class="nav justify-content-end">
@@ -48,7 +48,29 @@ else{
                 </li>
             </ul>
         </div>
-    </nav>
+    </nav> -->
+
+    <!--Navbar-->
+  <!--Navbar-->
+  <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
+    <div class="container justify-content-end justify-content-md-between">
+      <a class="navbar-brand d-none d-md-block " href="admin.php">Online Leave Application</a>
+      <ul class="nav justify-content-end align-items-center">
+            <li class="nav-item">
+                <a class="nav-link" href="admin.php" style="color:white;">Home</a>
+            </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="list_emp.php" style="color:white;">Employees <span class="badge badge-pill" style="background-color:#2196f3;"><?php include('count_emp.php');?></span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="leave_history.php" style="color:white;">Leave History</a>
+                </li>
+                <li class="nav-item">
+                <button id="logout" onclick="window.location.href='logout.php';" class="btn btn-sm btn-danger px-3">Logout</button>
+                </li>
+            </ul>
+    </div>
+  </nav>
 
     <h1>Admin Panel - Employee Leave History</h1>
 
@@ -150,7 +172,7 @@ else{
 
     <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
         <div>
-            <p class="text-center">Online Leave Application</p>
+            <!-- <p class="text-center">Online Leave Application</p> -->
             <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
         </div>
     </footer>

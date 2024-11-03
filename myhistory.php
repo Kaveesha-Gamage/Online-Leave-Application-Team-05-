@@ -76,7 +76,7 @@ else{
 
 <body>
   <!--Navbar-->
-  <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
+  <!-- <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
       <a class="navbar-brand" href="leaveAplicationForm.php">Online Leave Application</a>
       <ul class="nav justify-content-end">
@@ -90,6 +90,22 @@ else{
             </ul>
 
       
+    </div>
+  </nav> -->
+
+  <!--Navbar-->
+  <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
+    <div class="container justify-content-end justify-content-sm-between">
+      <a class="navbar-brand d-none d-sm-block " href="#">Online Leave Application</a>
+      <ul class="nav justify-content-end align-items-center">
+            <li class="nav-item">
+                <a class="nav-link" href="leaveAplicationForm.php" style="color:white;">Home</a>
+            </li>
+            <li class="nav-item">
+            <button id="logout" onclick="window.location.href='logout.php';" class="btn btn-sm btn-danger px-3">Logout</button>
+           
+            </li>
+            </ul>
     </div>
   </nav>
 

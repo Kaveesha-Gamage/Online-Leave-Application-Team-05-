@@ -163,14 +163,14 @@ else{
   <style>
     h1 {
       text-align: center;
-      font-size: 2.5em;
+      font-size: 2rem;
       font-weight: bold;
       padding-top: 1em;
       margin-bottom: -0.5em;
     }
 
     form {
-      padding: 40px;
+      padding: 30px;
     }
 
     input,
@@ -181,7 +181,7 @@ else{
     }
 
     label {
-      margin-top: 0.5em;
+      /* margin-top: 0.5em; */
       font-size: 1.1em !important;
     }
 
@@ -306,21 +306,21 @@ function validateDates() {
 <body>
   <!--Navbar-->
   <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Online Leave Application</a>
-      <ul class="nav justify-content-end">
-           
+    <div class="container justify-content-end justify-content-sm-between">
+      <a class="navbar-brand d-none d-sm-block " href="#">Online Leave Application</a>
+      <ul class="nav justify-content-end align-items-center">
             <li class="nav-item">
                 <a class="nav-link" href="myhistory.php" style="color:white;">My Leave History</a>
             </li>
             <li class="nav-item">
-            <button id="logout" onclick="window.location.href='logout.php';">Logout</button>
+            <button id="logout" onclick="window.location.href='logout.php';" class="btn btn-sm btn-danger px-3">Logout</button>
+           
             </li>
             </ul>
     </div>
   </nav>
 
-  <h1>Leave Application</h1>
+  <h1>Apply for Leave</h1>
 
   <div class="container">
   <div class="alert alert-danger" id="err" role="alert" style="display: none;">
@@ -328,82 +328,90 @@ function validateDates() {
 
 <form method="POST" onsubmit="return validateAndSubmit();">
 
-    <label><b>Select Leave Type :</b></label>
-        <!-- Error message if type of absence isn't selected -->
-        <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br/>
-        <div class="form-check">
-            <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick" required>
-            <label class="form-check-label" for="Sick">Sick</label>
+        <div class="col">
+          <div class="row row-cols-1 row-cols-md-2">
+            <div class="col">
+              <label><b>Leave Catoregory :</b></label>
+              <!-- Error message if type of absence isn't selected -->
+              <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br/>
+              <div class="form-check">
+                  <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick" required>
+                  <label class="form-check-label" for="Sick">Sick</label>
+              </div>
+              <div class="form-check">
+                  <input class="form-check-input" name="absence[]" type="radio" value="Casual" id="Casual">
+                  <label class="form-check-label" for="Casual">Casual</label>
+              </div>
+              <div class="form-check">
+                  <input class="form-check-input" name="absence[]" type="radio" value="Vacation" id="Vacation">
+                  <label class="form-check-label" for="Vacation">Vacation</label>
+              </div>
+              <div class="form-check">
+                  <input class="form-check-input" name="absence[]" type="radio" value="Duty" id="Duty">
+                  <label class="form-check-label" for="Duty">Duty</label>
+              </div>
+              <div class="form-check">
+                  <input class="form-check-input" name="absence[]" type="radio" value="Other" id="Other">
+                  <label class="form-check-label" for="Other">Others</label>
+              </div>
+            </div>
+            <div class="col" >
+              <div class="d-flex flex-column justify-content-start">
+                <div class=" justify-content-start">
+                  <label class="col" for="dates"><b>Starting from </b></label>
+                  <input class="col form-control" type="date" name="fromdate" onchange="updateToDate()" required >
+                </div>
+                <div class=" justify-content-start">
+                  <label class="col" for="dates"><b>Until</b></label>
+                  <input class="col form-control" type="date" name="todate" id="todate" required >
+                </div>
+              </div>
+            </div>
+            
+    </div>
+          </div>
+          
+                <div class="row ">
+          <label for="leaveDesc" class="form-label"><b>Reasons for your leave :</b></label>
+          <!-- error message if reason of the leave is not given -->
+          <span class="error"><?php echo "&nbsp;".$reasonErr ?></span>
+          <textarea class="form-control" name="reason" id="leaveDesc" rows="4" placeholder="Enter Here..." required></textarea>
+                </div>
+          
+                <div class="row ">
+          <label for="adderss" class="form-label"><b> Current Address : </b></label>
+          <input type="text" class="form-control" name="Address" id="Address" placeholder="Address during the leave" Required>
+                </div>
+          
+                <!--Acting arrangement details-->
+                <div class="row">
+          <label for="actorDepartment" class="form-label"><b> Acting employee's Department : </b></label>
+          <select name="ActorDepartment" onchange="fetchEmployeeIDs(this.value)" required class="form-select form-select">
+            <option>Select your Department</option>
+            <option>Computer Science</option>
+            <option>Physics</option>
+            <option>Mathematics and Statistics</option>
+            <option>Chemistry</option>
+            <option>Botany</option>
+            <option>Fisheries</option>
+            <option>Zoology</option>
+          </select>
+                </div>
+          
+                <div class="row mb-3">
+          <label for="actorEmployeeID" class="form-label"><b> Acting employee's Employee ID : </b></label>
+          <select class="form-control" id="ActorEmployeeID" name="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
+            <option value="">Select Employee ID</option>
+          </select>
+                </div>
+          
+                <div class="row mb-3">
+          <label for="Fullname" class="form-label"><b> Acting employee's Fullname : </b></label>
+          <input type="text" class="form-control" name="Actorfullname" id="Actorfullname" placeholder="Actor's Fullname" readonly>
+                </div>
+                
+                <div class="row"><input type="submit" name="submit" value="Submit Leave Request" class="btn btn-success btn-lg"></div>
         </div>
-        <div class="form-check">
-            <input class="form-check-input" name="absence[]" type="radio" value="Casual" id="Casual">
-            <label class="form-check-label" for="Casual">Casual</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" name="absence[]" type="radio" value="Vacation" id="Vacation">
-            <label class="form-check-label" for="Vacation">Vacation</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" name="absence[]" type="radio" value="Duty" id="Duty">
-            <label class="form-check-label" for="Duty">Duty</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" name="absence[]" type="radio" value="Other" id="Other">
-            <label class="form-check-label" for="Other">Others</label>
-        </div> 
-        <br/>
-  
-        <div class="mb-3">
-          <label for="dates"><b>From -</b></label>
-          <input type="date" name="fromdate" onchange="updateToDate()" required>
-
-          <label for="dates"><b>To -</b></label>
-          <input type="date" name="todate" id="todate" required>
-        </div>
-
-      
-  
-      <div class="mb-3">
-        <label for="leaveDesc" class="form-label"><b>Please mention reasons for your leave days :</b></label>
-        <!-- error message if reason of the leave is not given -->
-        <span class="error"><?php echo "&nbsp;".$reasonErr ?></span>
-        <textarea class="form-control" name="reason" id="leaveDesc" rows="4" placeholder="Enter Here..." required></textarea>
-      </div>
-
-      <div class="mb-3">
-        <label for="adderss" class="form-label"><b> Address of the applicant during the leave : </b></label>
-        <input type="text" class="form-control" name="Address" id="Address" placeholder="Address during the leave" Required>
-      </div>
-
-      <!--Acting arrangement details-->
-      <div class="mb-3">
-        <label for="actorDepartment" class="form-label"><b> Acting employee's Department : </b></label><br/>
-        <select name="ActorDepartment" onchange="fetchEmployeeIDs(this.value)" required>
-          <option>Select your Department</option>
-          <option>Computer Science</option>
-          <option>Physics</option>
-          <option>Mathematics and Statistics</option>
-          <option>Chemistry</option>
-          <option>Botany</option>
-          <option>Fisheries</option>
-          <option>Zoology</option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="actorEmployeeID" class="form-label"><b> Acting employee's Employee ID : </b></label>
-        <select class="form-control" id="ActorEmployeeID" name="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
-          <option value="">Select Employee ID</option>
-        </select>
-      </div>
-
-      <div class="mb-3">
-        <label for="Fullname" class="form-label"><b> Acting employee's Fullname : </b></label>
-        <input type="text" class="form-control" name="Actorfullname" id="Actorfullname" placeholder="Actor's Fullname" readonly>
-      </div>
-      
-      <br/>
-      <input type="submit" name="submit" value="Submit Leave Request" class="btn btn-success">
     </form>
   
     
@@ -411,7 +419,7 @@ function validateDates() {
 
   <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
     <div>
-    <p class="text-center">Online Leave Application</p>
+    <!-- <p class="text-center">Online Leave Application</p> -->
       <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
     </div>
   </footer>
