@@ -53,7 +53,7 @@ else{
     <!--Navbar-->
   <!--Navbar-->
   <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
-    <div class="container justify-content-end justify-content-md-between">
+    <div class="container justify-content-center justify-content-md-between">
       <a class="navbar-brand d-none d-md-block " href="admin.php">Online Leave Application</a>
       <ul class="nav justify-content-end align-items-center">
             <li class="nav-item">
@@ -77,7 +77,7 @@ else{
     <div class="mycontainer">
         <!-- Filter Form -->
         <form method="GET" action="" class="mb-3">
-            <div class="row">
+            <div class="row gy-3">
                 <div class="col-md-4">
                     <select name="empID" class="form-control">
                         <option value="">Select Employee ID</option>
@@ -95,7 +95,7 @@ else{
                 <div class="col-md-4">
                     <select name="status" class="form-control">
                         <option value="">Select Status</option>
-                        <option value="accepted" <?php if(isset($_GET['status']) && $_GET['status'] == "accepted") echo 'accepted'; ?>>accepted</option>
+                        <option value="accepted" <?php if(isset($_GET['status']) && $_GET['status'] == "accepted") echo 'accepted'; ?>>Accepted</option>
                         <option value="Pending" <?php if(isset($_GET['status']) && $_GET['status'] == "Pending") echo 'selected'; ?>>Pending</option>
                         <option value="Rejected" <?php if(isset($_GET['status']) && $_GET['status'] == "Rejected") echo 'selected'; ?>>Rejected</option>
                     </select>
@@ -108,7 +108,7 @@ else{
 
         <div class="table-responsive">
             <table class="table table-bordered table-hover table-striped">
-                <thead>
+                <thead class="align-middle">
                     <th>#</th>
                     <th>Employee</th>
                     <th>Employee ID</th>
@@ -144,7 +144,7 @@ else{
                                     $datetime1 = new DateTime($row1['fromdate']);
                                     $datetime2 = new DateTime($row1['todate']);
                                     $interval = $datetime1->diff($datetime2);
-                                    echo "<tr>
+                                    echo "<tr class=\"align-middle \">
                                             <td>$cnt</td>
                                             <td>{$row1['ename']}</td>
                                             <td>{$row1['empID']}</td>

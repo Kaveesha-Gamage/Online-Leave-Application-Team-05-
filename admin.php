@@ -74,7 +74,7 @@ else{
 
     <!--Navbar-->
   <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
-    <div class="container justify-content-end justify-content-md-between">
+    <div class="container justify-content-center justify-content-md-between">
       <a class="navbar-brand d-none d-md-block " href="admin.php">Online Leave Application</a>
       <ul class="nav justify-content-end align-items-center">
             <li class="nav-item">
@@ -99,58 +99,57 @@ else{
 
     <div class="mycontainer">
 
-            <table class="table table-bordered table-hover table-striped">
-                <thead class="align-middle">
-                    <th>#</th>
-                    <th>Emp ID</th>
-                    <th>Employee</th>
-                    <th>Application</th>
-                    <th>Dates</th>
-                    <th>Leave</th>
-                    <th>Actions</th>
-                    <!-- <th>Action</th> -->
-                </thead>
-                <tbody>
-                        <!-- loading all leave applications from database -->
-                        <?php
-                                global $row;
-                                $query = mysqli_query($conn,"SELECT * FROM leaves WHERE status='Pending'");
-                                
-                                $numrow = mysqli_num_rows($query);
-
-                               if($query){
-                                    
-                                    if($numrow!=0){
-                                         $cnt=1;
-
-                                          while($row = mysqli_fetch_assoc($query)){
-                                            $datetime1 = new DateTime($row['fromdate']);
-                                            $datetime2 = new DateTime($row['todate']);
-                                            $interval = $datetime1->diff($datetime2);
-                                            
-                                            echo "<tr class=\"align-middle \">
-                                                <td>$cnt</td>
-                                                <td>{$row['empID']}</td>
-                                                <td>{$row['ename']}</td>
-                                                <td>{$row['descr']}</td>
-                                                <td>{$datetime1->format('Y/m/d')} <b>--</b> {$datetime2->format('Y/m/d')}</td>
-                                                <td>{$interval->format('%a Day/s')}</td>
-                                                <td>
-                                                    <a href='updateStatusAccept.php?eid={$row['eid']}&descr=" . urlencode($row['descr']) . "'><button class='btn-success btn-sm'>Accept</button></a>
-                                                    <a href='javascript:void(0);' onclick='rejectLeave({$row['eid']}, \"" . addslashes($row['descr']) . "\");'><button class='btn-danger btn-sm'>Reject</button></a>
-                                                </td>
-                                            </tr>";
-  
-                                         $cnt++; }       
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover table-striped">
+                    <thead class="align-middle">
+                        <th>#</th>
+                        <th>Emp ID</th>
+                        <th>Employee</th>
+                        <th>Application</th>
+                        <th>Dates</th>
+                        <th>Leave</th>
+                        <th>Actions</th>
+                        <!-- <th>Action</th> -->
+                    </thead>
+                    <tbody>
+                            <!-- loading all leave applications from database -->
+                            <?php
+                                    global $row;
+                                    $query = mysqli_query($conn,"SELECT * FROM leaves WHERE status='Pending'");
+                
+                                    $numrow = mysqli_num_rows($query);
+                                   if($query){
+                
+                                        if($numrow!=0){
+                                             $cnt=1;
+                                              while($row = mysqli_fetch_assoc($query)){
+                                                $datetime1 = new DateTime($row['fromdate']);
+                                                $datetime2 = new DateTime($row['todate']);
+                                                $interval = $datetime1->diff($datetime2);
+                
+                                                echo "<tr class=\"align-middle \">
+                                                    <td>$cnt</td>
+                                                    <td>{$row['empID']}</td>
+                                                    <td>{$row['ename']}</td>
+                                                    <td>{$row['descr']}</td>
+                                                    <td>{$datetime1->format('Y/m/d')} <b>--</b> {$datetime2->format('Y/m/d')}</td>
+                                                    <td>{$interval->format('%a Day/s')}</td>
+                                                    <td class=\"text-center\">
+                                                        <a href='updateStatusAccept.php?eid={$row['eid']}&descr=" . urlencode($row['descr']) . "'><button class='btn-success btn-sm'>Accept</button></a>
+                                                        <a href='javascript:void(0);' onclick='rejectLeave({$row['eid']}, \"" . addslashes($row['descr']) . "\");'><button class='btn-danger btn-sm'>Reject</button></a>
+                                                    </td>
+                                                </tr>";
+                                             $cnt++; }
+                                        }
                                     }
-                                }
-                                else{
-                                    echo "Query Error : " . "SELECT * FROM leaves WHERE status='Pending'" . "<br>" . mysqli_error($conn);
-                                }
-                       ?> 
-                    
-                </tbody>
-            </table>
+                                    else{
+                                        echo "Query Error : " . "SELECT * FROM leaves WHERE status='Pending'" . "<br>" . mysqli_error($conn);
+                                    }
+                           ?>
+                
+                    </tbody>
+                </table>
+            </div>
     </div>
 
     <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">

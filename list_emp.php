@@ -74,7 +74,7 @@ else{
 
     <!--Navbar-->
   <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
-    <div class="container justify-content-end justify-content-md-between">
+    <div class="container justify-content-center justify-content-md-between">
       <a class="navbar-brand d-none d-md-block " href="admin.php">Online Leave Application</a>
       <ul class="nav justify-content-end align-items-center">
             <li class="nav-item">
@@ -99,7 +99,7 @@ else{
 
         <div class="table-responsive">
               <table class="table table-bordered table-hover table-striped">
-                  <thead>
+                  <thead class="align-middle ">
                       <th>#</th>
                       <th>Username</th>
                       <th>Fullname</th>
@@ -118,14 +118,14 @@ else{
                               $cnt=1;
                               while($row1 = mysqli_fetch_array($leaves)){
                                 
-                                echo "<tr>
+                                echo "<tr class=\"align-middle\">
                                         <td>$cnt</td>
                                         <td>{$row1['empID']}</td>
                                         <td>{$row1['fullname']}</td>
                                         <td>{$row1['email']}</td>
                                         <td>{$row1['gender']}</td>
                                         <td>{$row1['phone']}</td>
-                                        <td><a href=\"delete_emp.php?id={$row1['id']}\"><button class='btn-danger btn-sm' >Delete</button></a></td>
+                                        <td class=\"text-center\"><a href=\"delete_emp.php?id={$row1['id']}\"><button class='btn-danger btn-sm' >Delete</button></a></td>
                                         
                                       </tr>";
                              $cnt++; }
