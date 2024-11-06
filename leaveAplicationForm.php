@@ -1,5 +1,13 @@
 <?php
 require_once("DBConnection.php");
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+//Load Composer's autoloader
+require 'vendor/autoload.php';
+
 session_start();
 global $row;
 if(!isset($_SESSION["sess_user"])){
@@ -93,54 +101,46 @@ else{
       $query = "INSERT INTO leaves(eid, empID, ename, descr, fromdate, todate, ActorDepartment, ActorEmployeeID, Actorfullname, status) VALUES({$row['id']},'{$empID}','{$employeeFullName}','$absencePlusReason', '$fromdate', '$todate', '$ActorDepartment', '$ActorEmployeeID','$Actorfullname', '$status')";
       $execute = mysqli_query($conn,$query);
       if($execute){
-        echo '<script>alert("Leave Application Submitted. Please wait for approval status!")</script>';
-        header("Location: leaveAplicationForm.php");
-        exit();
+        $mail = new PHPMailer(true);
 
-        /* // Send email to admin using PHPMailer
-        require_once "./PHPMailer/PHPMailer.php";
-        require_once "./PHPMailer/SMTP.php";
-        require_once "./PHPMailer/Exception.php";
-        require './vendor/autoload.php';
+         $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+         $mail->isSMTP();
+         $mail->Host = "smtp.gmail.com";
+         $mail->SMTPAuth = true;
+         $mail->Username = "kvgz.1218@gmail.com";  // replace with actual email
+         $mail->Password = "juodyixyzrndffhg";      // replace with actual password
+         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+         $mail->Port = 465;
+         $mail->SMTPSecure = "ssl";
 
-        $mail = new PHPMailer\PHPMailer\PHPMailer();
+         $mail->SMTPDebug = 0;
+         $mail->Debugoutput = 'html';
 
-        // SMTP settings
-        $mail->isSMTP();
-        $mail->Host = "smtp.gmail.com"; // Or your SMTP host
-        $mail->SMTPAuth = true;
-        $mail->Username = "kvgz.1218@gmail.com"; // Replace with your email
-        $mail->Password = 'dpwv fguk escn bnmm'; // App-specific password or SMTP password
-        $mail->Port = 465;
-        $mail->SMTPSecure = "ssl";
-
-        // Email settings
-        $mail->isHTML(true);
-        $mail->setFrom($employeeEmail, $employeeFullName); // Set "From" to the employee's email and name
-        $mail->addAddress("testdata1324@gmail.com"); // Replace with the admin's email
-        $mail->Subject = "New Leave Request from $employeeFullName";
-
-        // Leave details
-        $mailContent = "<h3>New Leave Request</h3>
-            <p><b>Employee Name:</b> $employeeFullName</p>
-            <p><b>Leave Type:</b> $absence</p>
-            <p><b>From:</b> $fromdate</p>
-            <p><b>To:</b> $todate</p>
-            <p><b>Reason:</b> $reason</p>
-            <p><b>Acting Employee ID:</b> $ActorEmployeeID</p>
-            <p><b>Acting Employee Name:</b> $Actorfullname</p>
-            <p><b>Status:</b> Pending</p>";
-
-        $mail->Body = $mailContent;
-
-        if ($mail->send()) {
-            echo '<script>alert("Leave Application Submitted. Email notification sent to admin.")</script>';
+ 
+         // Email settings
+         $mail->setFrom("kvgz.1218@gmail.com", "Leave Management System");
+         $mail->addAddress("testdata1324@gmail.com");  // admin email address
+         $mail->isHTML(true);
+         $mail->Subject = "New Leave Application Submitted by $employeeFullName";
+         $mail->Body = "
+           <h3>Leave Application Details:</h3>
+           <p><strong>Employee ID:</strong> $empID</p>
+           <p><strong>Employee Name:</strong> $employeeFullName</p>
+           <p><strong>Leave Type:</strong> $absence</p>
+           <p><strong>From Date:</strong> $fromdate</p>
+           <p><strong>To Date:</strong> $todate</p>
+           <p><strong>Reason:</strong> $reason</p>
+         ";
+         
+        if($mail->send()) {
+          echo '<script>alert("Leave Application Submitted and notification sent to admin Successfully! Please wait for approval status.")</script>';
         } else {
-            echo "Email sending failed: " . $mail->ErrorInfo;
-        } */
-      }
-      else{
-        echo "Query Error : " . $query . "<br>" . mysqli_error($conn);
+          echo '<script>alert("Leave submitted but email notification failed: ' . $mail->ErrorInfo . '")</script>';
+        }
+        echo '<script>window.location.href="leaveAplicationForm.php";</script>';
+        exit();
+      } else {
+          echo "Query Error : " . $query . "<br>" . mysqli_error($conn);
       }
     }
   }
@@ -210,38 +210,40 @@ else{
   </style>
 
   <script>
-const validateAndSubmit = () => {
+    const validate = () => {
     let desc = document.getElementById('leaveDesc').value;
     let errDiv = document.getElementById('err');
+
+    // Get the radio buttons for absence
     let absenceRadios = document.getElementsByName("absence[]");
     let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
+
     let errMsg = [];
 
     if (desc === "") {
-        errMsg.push("Please enter the reason for leave.");
+      errMsg.push("Please enter the reason for leave.");
     }
+
     if (!selectedAbsence) {
-        errMsg.push("Please select the type of Leave.");
-    }
-    
-    // Validate the dates and capture any error message
-    const dateError = validateDates();
-    if (dateError) {
-        errMsg.push(dateError);
+      errMsg.push("Please select the type of Leave.");
     }
 
     // Show error messages if any
     if (errMsg.length > 0) {
-        errDiv.style.display = "block"; // Show the error div
-        errDiv.innerHTML = errMsg.join("<br/>"); // Set the error messages
-        scrollTo(0, 0); // Scroll to the top
-        return false; // Prevent form submission if validation fails
+      errDiv.style.display = "block";
+      let msgs = "";
+
+      for (let i = 0; i < errMsg.length; i++) {
+        msgs += errMsg[i] + "<br/>";
+      }
+
+      errDiv.innerHTML = msgs;
+      scrollTo(0, 0);
+      return false; // Prevent form submission
     }
 
-    alert("Leave Application Submitted. Please wait for approval status!");
-    return true; // Allow form submission if validation passes
-};
-
+    return true; // Allow form submission
+  }
     function fetchEmployeeIDs(department) {
       if (department === "Select your Department") return;
 
@@ -276,31 +278,60 @@ const validateAndSubmit = () => {
         })
         .catch(error => console.error('Error fetching employee name:', error));
     }
-      function updateToDate() {
-    const fromDate = document.querySelector('input[name="fromdate"]').value;
-    const toDateField = document.querySelector('input[name="todate"]');
-
-    if (fromDate) {
-        // Set the minimum date for "To" date based on "From" date
-        toDateField.min = fromDate;
-    } else {
-        // If no "From" date is selected, clear the min attribute
-        toDateField.min = "";
-    }
-}
-
-function validateDates() {
-    const fromDate = document.querySelector('input[name="fromdate"]').value;
-    const toDate = document.querySelector('input[name="todate"]').value;
-    let errMsg = "";
-
-    if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
-        errMsg = "The 'To' date cannot be earlier than the 'From' date.";
-    }
-
-    return errMsg; // Return error message if any
-}
   </script>
+
+  <script>
+      const validateAndSubmit = () => {
+          let desc = document.getElementById('leaveDesc').value;
+          let errDiv = document.getElementById('err');
+          let absenceRadios = document.getElementsByName("absence[]");
+          let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
+          let errMsg = [];
+
+          if (desc === "") {
+              errMsg.push("Please enter the reason for leave.");
+          }
+          if (!selectedAbsence) {
+              errMsg.push("Please select the type of Leave.");
+          }
+          
+          if (errMsg.length > 0) {
+              errDiv.style.display = "block";
+              errDiv.innerHTML = errMsg.join("<br/>");
+              scrollTo(0, 0);
+              return false; // Prevent form submission if validation fails
+          }
+
+          alert("Leave Application Submitted Successfully!");
+          return true; // Allow form submission if validation passes
+      };
+  </script>
+
+  <script>
+      function updateToDate() {
+          // Get the selected "From" date
+          const fromDate = document.querySelector('input[name="fromdate"]').value;
+          const toDateField = document.querySelector('input[name="todate"]');
+
+          if (fromDate) {
+              // Set the minimum date for "To" date based on "From" date
+              toDateField.min = fromDate;
+          }
+      }
+
+      function validateDates() {
+          const fromDate = document.querySelector('input[name="fromdate"]').value;
+          const toDate = document.querySelector('input[name="todate"]').value;
+          
+          if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
+              alert("The 'To' date cannot be earlier than the 'From' date.");
+              return false; // Prevent form submission
+          }
+          return true; // Allow form submission if dates are valid
+      }
+  </script>
+
+
 </head>
 
 <body>
@@ -317,17 +348,21 @@ function validateDates() {
             <button id="logout" onclick="window.location.href='logout.php';">Logout</button>
             </li>
             </ul>
+
+      
     </div>
   </nav>
+
 
   <h1>Leave Application</h1>
 
   <div class="container">
-  <div class="alert alert-danger" id="err" role="alert" style="display: none;">
-</div>
-
-<form method="POST" onsubmit="return validateAndSubmit();">
-
+    <div class="alert alert-danger" id="err" role="alert">
+    </div>
+  
+    <form method="POST">
+      
+  
     <label><b>Select Leave Type :</b></label>
         <!-- Error message if type of absence isn't selected -->
         <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br/>
@@ -353,14 +388,13 @@ function validateDates() {
         </div> 
         <br/>
   
-        <div class="mb-3">
-          <label for="dates"><b>From -</b></label>
-          <input type="date" name="fromdate" onchange="updateToDate()" required>
-
-          <label for="dates"><b>To -</b></label>
-          <input type="date" name="todate" id="todate" required>
-        </div>
-
+      <div class="mb-3 ">
+        <label for="dates"><b>From -</b></label>
+        <input type="date" name="fromdate" min="<?= date('Y-m-d'); ?>" onchange="updateToDate()">
+  
+        <label for="dates"><b>To -</b></label>
+        <input type="date" name="todate" min="<?= date('Y-m-d'); ?>">
+      </div>
       
   
       <div class="mb-3">

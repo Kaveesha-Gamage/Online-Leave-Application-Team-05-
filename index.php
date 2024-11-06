@@ -91,6 +91,11 @@ session_start();
                         <input class="form-control" type="password" id="password" name="password" placeholder="Enter Password" required>
                     </div>
                     <input type="submit" class="btn btn-success" name="login" value="Log In">
+                    
+                    <div>
+                        <p><a href="forgot_password.php">Forgot Password?</a></p>
+                        <p>Don't you have an account? <a href="signup.php">signup here</a></p>
+                    </div>
                 </form>
             </div>
             <!-- rightComponent ends -->
