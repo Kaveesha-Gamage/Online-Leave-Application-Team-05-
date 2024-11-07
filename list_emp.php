@@ -95,7 +95,7 @@ else{
 
     <h1>Admin Panel - Registered Employees</h1>
 
-    <div class="mycontainer">
+    <div class="mycontainer pb-4">
 
         <div class="table-responsive">
               <table class="table table-bordered table-hover table-striped">
@@ -106,7 +106,7 @@ else{
                       <th>Email</th>
                       <th>Gender</th>
                       <th>Contact</th>
-                      <th>Action</th>
+                      <th class="text-center">Action</th>
                   </thead>
                   <tbody>
                     <!-- loading all leave applications of the user -->

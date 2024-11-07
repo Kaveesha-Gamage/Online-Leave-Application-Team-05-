@@ -117,12 +117,12 @@ else{
     <div class="table-responsive">
     
       <table class="table table-bordered table-hover table-striped">
-          <thead>
+          <thead class="align-middle">
               <th>#</th>
               <th>Leave Application</th>
               <th>From-Date</th>
               <th>To-Date</th>
-              <th>Status</th>
+              <th class="text-center">Status</th>
           </thead>
           <tbody>
             <!-- loading all leave applications of the user -->
@@ -133,15 +133,23 @@ else{
                     if($numrow!=0){
                       $cnt=1;
                       while($row1 = mysqli_fetch_array($leaves)){
-                        echo "<tr>
+                        $statusText = $row1['status'];
+                        if ($statusText === 'Accepted') {
+                            $statusClass = 'text-success';
+                        } elseif ($statusText === 'Pending') {
+                            $statusClass = 'text-warning';
+                        } elseif ($statusText === 'Rejected') {
+                            $statusClass = 'text-danger';
+                        }
+                        echo "<tr class=\"align-middle\">
                               <td>$cnt</td>
                               <td>{$row1['descr']}</td>
                               <td>{$row1['fromdate']}</td>
                               <td>{$row1['todate']}</td>
-                              <td>
+                              <td class=\"text-center $statusClass\">
                                   <b>{$row1['status']}</b>
                                   " . ($row1['status'] === 'Rejected' && !empty($row1['rejection_reason']) ? 
-                                      "<br><small class='text-danger'>Reason: {$row1['rejection_reason']}</small>" : '') . "
+                                      "<br><small class='text-danger fs-6 fw-light'>{$row1['rejection_reason']}</small>" : '') . "
                               </td>
                           </tr>";
 

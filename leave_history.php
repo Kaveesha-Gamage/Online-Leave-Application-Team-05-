@@ -74,7 +74,7 @@ else{
 
     <h1>Admin Panel - Employee Leave History</h1>
 
-    <div class="mycontainer">
+    <div class="mycontainer pb-4">
         <!-- Filter Form -->
         <form method="GET" action="" class="mb-3">
             <div class="row gy-3">
@@ -116,7 +116,7 @@ else{
                     <th>Days</th>
                     <th>From-Date</th>
                     <th>To-Date</th>
-                    <th>Status</th>
+                    <th class="text-center">Status</th>
                 </thead>
                 <tbody>
                     <?php
@@ -144,6 +144,15 @@ else{
                                     $datetime1 = new DateTime($row1['fromdate']);
                                     $datetime2 = new DateTime($row1['todate']);
                                     $interval = $datetime1->diff($datetime2);
+
+                                    $statusText = $row1['status'];
+                                    if ($statusText === 'Accepted') {
+                                        $statusClass = 'text-success';
+                                    } elseif ($statusText === 'Pending') {
+                                        $statusClass = 'text-warning';
+                                    } elseif ($statusText === 'Rejected') {
+                                        $statusClass = 'text-danger';
+                                    }
                                     echo "<tr class=\"align-middle \">
                                             <td>$cnt</td>
                                             <td>{$row1['ename']}</td>
@@ -152,8 +161,8 @@ else{
                                             <td>{$interval->format('%a Day/s')}</td>
                                             <td>{$datetime1->format('Y/m/d')}</td>
                                             <td>{$datetime2->format('Y/m/d')}</td>
-                                            <td><b>{$row1['status']}</b>" . 
-                                            ($row1['status'] === 'Rejected' && !empty($row1['rejection_reason']) ? "<br><small class='text-danger'>Reason: {$row1['rejection_reason']}</small>" : '') . 
+                                            <td class=\"text-center $statusClass\"><b>{$row1['status']}</b>" . 
+                                            ($row1['status'] === 'Rejected' && !empty($row1['rejection_reason']) ? "<br><small class='text-danger'>{$row1['rejection_reason']}</small>" : '') . 
                                             "</td>
                                           </tr>";
                                     $cnt++; 

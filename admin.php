@@ -97,7 +97,7 @@ else{
 
     <h1>Admin Panel</h1>
 
-    <div class="mycontainer">
+    <div class="mycontainer pb-4">
 
             <div class="table-responsive">
                 <table class="table table-bordered table-hover table-striped">
@@ -108,7 +108,7 @@ else{
                         <th>Application</th>
                         <th>Dates</th>
                         <th>Leave</th>
-                        <th>Actions</th>
+                        <th class="text-center">Actions</th>
                         <!-- <th>Action</th> -->
                     </thead>
                     <tbody>
