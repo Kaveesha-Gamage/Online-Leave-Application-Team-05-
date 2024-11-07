@@ -85,7 +85,12 @@ session_start();
                             <label for="password">Password</label>
                         </div>
                         <input type="submit" class="btn btn-lg btn-success" name="login" value="Log In">
-                    </form>
+                        
+                    <div>
+                        <p><a href="forgot_password.php">Forgot Password?</a></p>
+                        <p>Don't you have an account? <a href="signup.php">signup here</a></p>
+                    </div>
+                </form>
                 </div>
             </div>
             <!-- rightComponent ends -->

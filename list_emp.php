@@ -1,10 +1,11 @@
 <?php
 require_once("DBConnection.php");
 session_start();
-if(!isset($_SESSION["sess_user"])){
-  header("Location: index.php");
+
+if(!isset($_SESSION["sess_user"])) {
+    header("Location: index.php");
+    exit();
 }
-else{
 ?>
 
 <!DOCTYPE html>
@@ -21,26 +22,35 @@ else{
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
     <link rel="stylesheet" href="css/style.css">
     <title>Admin Panel</title>
-
     <style>
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background-color: #f4f4f4;
+        }
         h1 {
             text-align: center;
             font-size: 2.5em;
             font-weight: bold;
             padding-top: 1em;
         }
-
         .mycontainer {
             width: 90%;
             margin: 1.5rem auto;
             min-height: 60vh;
         }
-
-        .mycontainer table {
+        .table-responsive {
             margin: 1.5rem auto;
         }
+        .footer {
+            background-color: #f4f4f4;
+            padding: 1rem;
+            text-align: center;
+            color: #333;
+        }
+        .btn-danger {
+            cursor: pointer;
+        }
     </style>
-
 </head>
 
 <body>
@@ -59,14 +69,15 @@ else{
             <!-- <ul class="nav justify-content-end">
 
             <li class="nav-item">
-            <a class="nav-link" href="list_emp.php" style="color:white;">View Employees <span class="badge badge-pill" style="background-color:#2196f3;"><?php include('count_emp.php');?></span></a>
-            </li>
-            
-            <li class="nav-item">
-                <a class="nav-link" href="leave_history.php" style="color:white;">View Leave History</a>
+                <a class="nav-link" href="list_emp.php" style="color: #2196f3;">
+                    View Employees <span class="badge badge-pill bg-primary"><?php include('count_emp.php');?></span>
+                </a>
             </li>
             <li class="nav-item">
-            <button id="logout" onclick="window.location.href='logout.php';">Logout</button> </div>
+                <a class="nav-link" href="leave_history.php" style="color: #2196f3;">View Leave History</a>
+            </li>
+            <li class="nav-item">
+                <button id="logout" onclick="window.location.href='logout.php';" class="btn btn-outline-danger">Logout</button>
             </li>
             </ul>
             
@@ -93,7 +104,7 @@ else{
     </div>
   </nav>
 
-    <h1>Admin Panel - Registered Employees</h1>
+<h1>Admin Panel - Registered Employees</h1>
 
     <div class="mycontainer pb-4">
 
@@ -149,12 +160,9 @@ else{
     </div>
     </footer>
 </body>
-
 </html>
 
 <?php
-}
-
 ini_set('display_errors', true);
 error_reporting(E_ALL);
 ?>
