@@ -10,119 +10,111 @@ require 'vendor/autoload.php';
 
 session_start();
 global $row;
-if(!isset($_SESSION["sess_user"])){
+if (!isset($_SESSION["sess_user"])) {
   header("Location: index.php");
-}
-else{
+} else {
 ?>
 
-<?php 
+  <?php
   $reasonErr = $absenceErr = $absencePlusReason = $ActorEmployeeID = $absence = "";
   global $leaveApplicationValidate;
-  if(isset($_POST['submit'])){
-    if(empty($_POST['absence'])){
+  if (isset($_POST['submit'])) {
+    if (empty($_POST['absence'])) {
       $absenceErr = "Please select absence type";
       $leaveApplicationValidate = false;
-    }
-    else{
+    } else {
       $arr = $_POST['absence'];
-      $absence = implode(",",$arr);
+      $absence = implode(",", $arr);
       $leaveApplicationValidate = true;
     }
 
-    if(empty($_POST['fromdate'])){
+    if (empty($_POST['fromdate'])) {
       $fromdateErr = "Please Enter starting date";
       $leaveApplicationValidate = false;
-    }
-    else{
-      $fromdate = mysqli_real_escape_string($conn,$_POST['fromdate']);
+    } else {
+      $fromdate = mysqli_real_escape_string($conn, $_POST['fromdate']);
       $leaveApplicationValidate = true;
     }
 
-    if(empty($_POST['todate'])){
+    if (empty($_POST['todate'])) {
       $todateErr = "Please Enter ending date";
       $leaveApplicationValidate = false;
-    }
-    else{
-      $todate = mysqli_real_escape_string($conn,$_POST['todate']);
+    } else {
+      $todate = mysqli_real_escape_string($conn, $_POST['todate']);
       $leaveApplicationValidate = true;
     }
 
-    $reason = mysqli_real_escape_string($conn,$_POST['reason']);
-    if(empty($reason)){
+    $reason = mysqli_real_escape_string($conn, $_POST['reason']);
+    if (empty($reason)) {
       $reasonErr = "Please give reason for the leave in detail";
       $leaveApplicationValidate = false;
-    }
-    else{
-      $absencePlusReason = $absence." : ".$reason;
+    } else {
+      $absencePlusReason = $absence . " : " . $reason;
       $leaveApplicationValidate = true;
     }
 
-    if(empty($_POST['ActorDepartment'])){
+    if (empty($_POST['ActorDepartment'])) {
       $actIDErr = "Please Enter Actor's Department";
       $leaveApplicationValidate = false;
-    }
-    else{
-      $ActorDepartment = mysqli_real_escape_string($conn,$_POST['ActorDepartment']);
+    } else {
+      $ActorDepartment = mysqli_real_escape_string($conn, $_POST['ActorDepartment']);
       $leaveApplicationValidate = true;
     }
 
-    if(empty($_POST['ActorEmployeeID'])){
+    if (empty($_POST['ActorEmployeeID'])) {
       $actIDErr = "Please Enter Actor's EmployeeID";
       $leaveApplicationValidate = false;
-    }
-    else{
-      $ActorEmployeeID = mysqli_real_escape_string($conn,$_POST['ActorEmployeeID']);
+    } else {
+      $ActorEmployeeID = mysqli_real_escape_string($conn, $_POST['ActorEmployeeID']);
       $leaveApplicationValidate = true;
     }
 
-    if(empty($_POST['Actorfullname'])){
+    if (empty($_POST['Actorfullname'])) {
       $actnameErr = "Please Enter Actor's name";
       $leaveApplicationValidate = false;
-    }
-    else{
-      $Actorfullname = mysqli_real_escape_string($conn,$_POST['Actorfullname']);
+    } else {
+      $Actorfullname = mysqli_real_escape_string($conn, $_POST['Actorfullname']);
       $leaveApplicationValidate = true;
     }
-    
+
     $status = "Pending";
-    
-    if($leaveApplicationValidate){
+
+    if ($leaveApplicationValidate) {
       // for empID
       $empID = $_SESSION["sess_user"]; // Updated to fetch empID from session
       $eid_query = mysqli_query($conn, "SELECT id, email, fullname FROM users WHERE empID='" . $empID . "'");
-      
+
       $row = mysqli_fetch_array($eid_query);
 
       // Extract the employee's email and full name
       $employeeEmail = $row['email'];
       $employeeFullName = $row['fullname'];
-      
+
       $query = "INSERT INTO leaves(eid, empID, ename, descr, fromdate, todate, ActorDepartment, ActorEmployeeID, Actorfullname, status) VALUES({$row['id']},'{$empID}','{$employeeFullName}','$absencePlusReason', '$fromdate', '$todate', '$ActorDepartment', '$ActorEmployeeID','$Actorfullname', '$status')";
-      $execute = mysqli_query($conn,$query);
-      if($execute){
+      $execute = mysqli_query($conn, $query);
+      if ($execute) {
         $mail = new PHPMailer(true);
 
-         $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-         $mail->isSMTP();
-         $mail->Host = "smtp.gmail.com";
-         $mail->SMTPAuth = true;
-         $mail->Username = "kvgz.1218@gmail.com";  // replace with actual email
-         $mail->Password = "juodyixyzrndffhg";      // replace with actual password
-         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-         $mail->Port = 465;
-         $mail->SMTPSecure = "ssl";
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->Host = "smtp.gmail.com";
+        $mail->SMTPAuth = true;
+        $mail->Username = "kvgz.1218@gmail.com";  // replace with actual email
+        $mail->Password = "juodyixyzrndffhg";      // replace with actual password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port = 465;
+        $mail->SMTPSecure = "ssl";
 
-         $mail->SMTPDebug = 0;
-         $mail->Debugoutput = 'html';
+        $mail->SMTPDebug = 0;
+        $mail->Debugoutput = 'html';
 
- 
-         // Email settings
-         $mail->setFrom("kvgz.1218@gmail.com", "Leave Management System");
-         $mail->addAddress("testdata1324@gmail.com");  // admin email address
-         $mail->isHTML(true);
-         $mail->Subject = "New Leave Application Submitted by $employeeFullName";
-         $mail->Body = "
+
+        // Email settings
+        $mail->setFrom("kvgz.1218@gmail.com", "Leave Management System");
+        $mail->addAddress("testdata1324@gmail.com");  // admin email address
+        $mail->isHTML(true);
+        $mail->Subject = "New Leave Application Submitted by $employeeFullName";
+        $mail->Body = "
            <h3>Leave Application Details:</h3>
            <p><strong>Employee ID:</strong> $empID</p>
            <p><strong>Employee Name:</strong> $employeeFullName</p>
@@ -131,8 +123,8 @@ else{
            <p><strong>To Date:</strong> $todate</p>
            <p><strong>Reason:</strong> $reason</p>
          ";
-         
-        if($mail->send()) {
+
+        if ($mail->send()) {
           echo '<script>alert("Leave Application Submitted and notification sent to admin Successfully! Please wait for approval status.")</script>';
         } else {
           echo '<script>alert("Leave submitted but email notification failed: ' . $mail->ErrorInfo . '")</script>';
@@ -140,284 +132,285 @@ else{
         echo '<script>window.location.href="leaveAplicationForm.php";</script>';
         exit();
       } else {
-          echo "Query Error : " . $query . "<br>" . mysqli_error($conn);
+        echo "Query Error : " . $query . "<br>" . mysqli_error($conn);
       }
     }
   }
-?>
+  ?>
 
-<!DOCTYPE html>
-<html lang="en">
+  <!DOCTYPE html>
+  <html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
-  <link rel="stylesheet" href="css/style.css">
-  <title>Leave Application</title>
-  <style>
-    h1 {
-      text-align: center;
-      font-size: 2rem;
-      font-weight: bold;
-      padding-top: 1em;
-      margin-bottom: -0.5em;
-    }
-
-    form {
-      padding: 30px;
-    }
-
-    input,
-    textarea {
-      margin: 5px;
-      font-size: 1.1em !important;
-      outline: none;
-    }
-
-    label {
-      /* margin-top: 0.5em; */
-      font-size: 1.1em !important;
-    }
-
-    label.form-check-label {
-      margin-top: 0px;
-    }
-
-    #err {
-      display: none;
-      padding: 1.5em;
-      padding-left: 4em;
-      font-size: 1.2em;
-      font-weight: bold;
-      margin-top: 1em;
-    }
-
-    table {
-      width: 90% !important;
-      margin: 1.5rem auto !important;
-      font-size: 1.1em !important;
-    }
-
-    .error {
-      color: #FF0000;
-    }
-  </style>
-
-  <script>
-    const validate = () => {
-    let desc = document.getElementById('leaveDesc').value;
-    let errDiv = document.getElementById('err');
-
-    // Get the radio buttons for absence
-    let absenceRadios = document.getElementsByName("absence[]");
-    let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
-
-    let errMsg = [];
-
-    if (desc === "") {
-      errMsg.push("Please enter the reason for leave.");
-    }
-
-    if (!selectedAbsence) {
-      errMsg.push("Please select the type of Leave.");
-    }
-
-    // Show error messages if any
-    if (errMsg.length > 0) {
-      errDiv.style.display = "block";
-      let msgs = "";
-
-      for (let i = 0; i < errMsg.length; i++) {
-        msgs += errMsg[i] + "<br/>";
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <title>Leave Application</title>
+    <style>
+      h1 {
+        text-align: center;
+        font-size: 2rem;
+        font-weight: bold;
+        padding-top: 1em;
+        margin-bottom: -0.5em;
       }
 
-      errDiv.innerHTML = msgs;
-      scrollTo(0, 0);
-      return false; // Prevent form submission
-    }
+      form {
+        padding: 30px;
+      }
 
-    return true; // Allow form submission
-  }
-    function fetchEmployeeIDs(department) {
-      if (department === "Select your Department") return;
+      input,
+      textarea {
+        margin: 5px;
+        font-size: 1.1em !important;
+        outline: none;
+      }
 
-      axios.get(`fetch_employee_ids.php?department=${department}`)
-        .then(response => {
-          const employeeIDField = document.getElementById('ActorEmployeeID');
-          const actorFullnameField = document.getElementById('Actorfullname');
-          employeeIDField.value = ''; // Clear previous value
-          actorFullnameField.value = ''; // Clear previous name
+      label {
+        /* margin-top: 0.5em; */
+        font-size: 1.1em !important;
+      }
 
-          // Clear existing options
-          employeeIDField.innerHTML = '<option value="">Select Employee ID</option>';
+      label.form-check-label {
+        margin-top: 0px;
+      }
 
-          // Populate employee IDs dropdown
-          response.data.forEach(emp => {
-            const option = document.createElement('option');
-            option.value = emp.empID;
-            option.textContent = emp.empID;
-            employeeIDField.appendChild(option);
-          });
-        })
-        .catch(error => console.error('Error fetching employee IDs:', error));
-    }
+      #err {
+        display: none;
+        padding: 1.5em;
+        padding-left: 4em;
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-top: 1em;
+      }
 
-    function fetchEmployeeName(employeeID) {
-      if (!employeeID) return;
+      table {
+        width: 90% !important;
+        margin: 1.5rem auto !important;
+        font-size: 1.1em !important;
+      }
 
-      axios.get(`fetch_employee_name.php?id=${employeeID}`)
-        .then(response => {
-          const actorFullnameField = document.getElementById('Actorfullname');
-          actorFullnameField.value = response.data.fullname; // Set full name
-        })
-        .catch(error => console.error('Error fetching employee name:', error));
-    }
-  </script>
+      .error {
+        color: #FF0000;
+      }
+    </style>
 
-  <script>
+    <script>
+      const validate = () => {
+        let desc = document.getElementById('leaveDesc').value;
+        let errDiv = document.getElementById('err');
+
+        // Get the radio buttons for absence
+        let absenceRadios = document.getElementsByName("absence[]");
+        let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
+
+        let errMsg = [];
+
+        if (desc === "") {
+          errMsg.push("Please enter the reason for leave.");
+        }
+
+        if (!selectedAbsence) {
+          errMsg.push("Please select the type of Leave.");
+        }
+
+        // Show error messages if any
+        if (errMsg.length > 0) {
+          errDiv.style.display = "block";
+          let msgs = "";
+
+          for (let i = 0; i < errMsg.length; i++) {
+            msgs += errMsg[i] + "<br/>";
+          }
+
+          errDiv.innerHTML = msgs;
+          scrollTo(0, 0);
+          return false; // Prevent form submission
+        }
+
+        return true; // Allow form submission
+      }
+
+      function fetchEmployeeIDs(department) {
+        if (department === "Select your Department") return;
+
+        axios.get(`fetch_employee_ids.php?department=${department}`)
+          .then(response => {
+            const employeeIDField = document.getElementById('ActorEmployeeID');
+            const actorFullnameField = document.getElementById('Actorfullname');
+            employeeIDField.value = ''; // Clear previous value
+            actorFullnameField.value = ''; // Clear previous name
+
+            // Clear existing options
+            employeeIDField.innerHTML = '<option value="">Select Employee ID</option>';
+
+            // Populate employee IDs dropdown
+            response.data.forEach(emp => {
+              const option = document.createElement('option');
+              option.value = emp.empID;
+              option.textContent = emp.empID;
+              employeeIDField.appendChild(option);
+            });
+          })
+          .catch(error => console.error('Error fetching employee IDs:', error));
+      }
+
+      function fetchEmployeeName(employeeID) {
+        if (!employeeID) return;
+
+        axios.get(`fetch_employee_name.php?id=${employeeID}`)
+          .then(response => {
+            const actorFullnameField = document.getElementById('Actorfullname');
+            actorFullnameField.value = response.data.fullname; // Set full name
+          })
+          .catch(error => console.error('Error fetching employee name:', error));
+      }
+    </script>
+
+    <script>
       const validateAndSubmit = () => {
-          let desc = document.getElementById('leaveDesc').value;
-          let errDiv = document.getElementById('err');
-          let absenceRadios = document.getElementsByName("absence[]");
-          let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
-          let errMsg = [];
+        let desc = document.getElementById('leaveDesc').value;
+        let errDiv = document.getElementById('err');
+        let absenceRadios = document.getElementsByName("absence[]");
+        let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
+        let errMsg = [];
 
-          if (desc === "") {
-              errMsg.push("Please enter the reason for leave.");
-          }
-          if (!selectedAbsence) {
-              errMsg.push("Please select the type of Leave.");
-          }
-          
-          if (errMsg.length > 0) {
-              errDiv.style.display = "block";
-              errDiv.innerHTML = errMsg.join("<br/>");
-              scrollTo(0, 0);
-              return false; // Prevent form submission if validation fails
-          }
+        if (desc === "") {
+          errMsg.push("Please enter the reason for leave.");
+        }
+        if (!selectedAbsence) {
+          errMsg.push("Please select the type of Leave.");
+        }
 
-          alert("Leave Application Submitted Successfully!");
-          return true; // Allow form submission if validation passes
+        if (errMsg.length > 0) {
+          errDiv.style.display = "block";
+          errDiv.innerHTML = errMsg.join("<br/>");
+          scrollTo(0, 0);
+          return false; // Prevent form submission if validation fails
+        }
+
+        alert("Leave Application Submitted Successfully!");
+        return true; // Allow form submission if validation passes
       };
-  </script>
+    </script>
 
-  <script>
+    <script>
       function updateToDate() {
-          // Get the selected "From" date
-          const fromDate = document.querySelector('input[name="fromdate"]').value;
-          const toDateField = document.querySelector('input[name="todate"]');
+        // Get the selected "From" date
+        const fromDate = document.querySelector('input[name="fromdate"]').value;
+        const toDateField = document.querySelector('input[name="todate"]');
 
-          if (fromDate) {
-              // Set the minimum date for "To" date based on "From" date
-              toDateField.min = fromDate;
-          }
+        if (fromDate) {
+          // Set the minimum date for "To" date based on "From" date
+          toDateField.min = fromDate;
+        }
       }
 
       function validateDates() {
-          const fromDate = document.querySelector('input[name="fromdate"]').value;
-          const toDate = document.querySelector('input[name="todate"]').value;
-          
-          if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
-              alert("The 'To' date cannot be earlier than the 'From' date.");
-              return false; // Prevent form submission
-          }
-          return true; // Allow form submission if dates are valid
+        const fromDate = document.querySelector('input[name="fromdate"]').value;
+        const toDate = document.querySelector('input[name="todate"]').value;
+
+        if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
+          alert("The 'To' date cannot be earlier than the 'From' date.");
+          return false; // Prevent form submission
+        }
+        return true; // Allow form submission if dates are valid
       }
-  </script>
+    </script>
 
 
-</head>
+  </head>
 
-<body>
-  <!--Navbar-->
-  <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
-    <div class="container justify-content-end justify-content-sm-between">
-      <a class="navbar-brand d-none d-sm-block " href="#">Online Leave Application</a>
-      <ul class="nav justify-content-end align-items-center">
-            <li class="nav-item">
-                <a class="nav-link" href="myhistory.php" style="color:white;">My Leave History</a>
-            </li>
-            <li class="nav-item">
+  <body>
+    <!--Navbar-->
+    <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
+      <div class="container justify-content-end justify-content-sm-between">
+        <a class="navbar-brand d-none d-sm-block " href="#">Online Leave Application</a>
+        <ul class="nav justify-content-end align-items-center">
+          <li class="nav-item">
+            <a class="nav-link" href="myhistory.php" style="color:white;">My Leave History</a>
+          </li>
+          <li class="nav-item">
             <button id="logout" onclick="window.location.href='logout.php';" class="btn btn-sm btn-danger px-3">Logout</button>
-           
-            </li>
-            </ul>
 
-      
-    </div>
-  </nav>
+          </li>
+        </ul>
 
-  <h1>Leave Application</h1>
 
-  <div class="container">
-  <div class="alert alert-danger" id="err" role="alert" style="display: none;">
-</div>
+      </div>
+    </nav>
 
-<form method="POST" onsubmit="return validateAndSubmit();">
+    <h1>Leave Application</h1>
+
+    <div class="container  pb-4">
+      <div class="alert alert-danger" id="err" role="alert" style="display: none;">
+      </div>
+
+      <form method="POST" onsubmit="return validateAndSubmit();">
 
         <div class="col">
-          <div class="row row-cols-1 row-cols-md-2">
-            <div class="col">
+          <div class="row row-cols-1">
+            <div class="col mb-3">
               <label><b>Leave Catoregory :</b></label>
               <!-- Error message if type of absence isn't selected -->
-              <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br/>
+              <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br />
               <div class="form-check">
-                  <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick" required>
-                  <label class="form-check-label" for="Sick">Sick</label>
+                <input class="form-check-input" name="absence[]" type="radio" value="Sick" id="Sick" required>
+                <label class="form-check-label" for="Sick">Sick</label>
               </div>
               <div class="form-check">
-                  <input class="form-check-input" name="absence[]" type="radio" value="Casual" id="Casual">
-                  <label class="form-check-label" for="Casual">Casual</label>
+                <input class="form-check-input" name="absence[]" type="radio" value="Casual" id="Casual">
+                <label class="form-check-label" for="Casual">Casual</label>
               </div>
               <div class="form-check">
-                  <input class="form-check-input" name="absence[]" type="radio" value="Vacation" id="Vacation">
-                  <label class="form-check-label" for="Vacation">Vacation</label>
+                <input class="form-check-input" name="absence[]" type="radio" value="Vacation" id="Vacation">
+                <label class="form-check-label" for="Vacation">Vacation</label>
               </div>
               <div class="form-check">
-                  <input class="form-check-input" name="absence[]" type="radio" value="Duty" id="Duty">
-                  <label class="form-check-label" for="Duty">Duty</label>
+                <input class="form-check-input" name="absence[]" type="radio" value="Duty" id="Duty">
+                <label class="form-check-label" for="Duty">Duty</label>
               </div>
               <div class="form-check">
-                  <input class="form-check-input" name="absence[]" type="radio" value="Other" id="Other">
-                  <label class="form-check-label" for="Other">Others</label>
+                <input class="form-check-input" name="absence[]" type="radio" value="Other" id="Other">
+                <label class="form-check-label" for="Other">Others</label>
               </div>
             </div>
-            <div class="col" >
+            <div class="col">
               <div class="d-flex flex-column justify-content-start">
                 <div class=" justify-content-start">
-                  <label class="col" for="dates"><b>Starting from </b></label>
-                  <input class="col form-control" type="date" name="fromdate" onchange="updateToDate()" required >
+                  <label class="col" for="dates"><b>From </b></label>
+                  <input class="col form-control" type="date" name="fromdate" onchange="updateToDate()" required>
                 </div>
                 <div class=" justify-content-start">
-                  <label class="col" for="dates"><b>Until</b></label>
-                  <input class="col form-control" type="date" name="todate" id="todate" required >
+                  <label class="col" for="dates"><b>To</b></label>
+                  <input class="col form-control" type="date" name="todate" id="todate" required>
                 </div>
               </div>
             </div>
-            
-    </div>
+
           </div>
-          
-                <div class="row ">
+        </div>
+
+        <div class="row  mb-3">
           <label for="leaveDesc" class="form-label"><b>Reasons for your leave :</b></label>
           <!-- error message if reason of the leave is not given -->
-          <span class="error"><?php echo "&nbsp;".$reasonErr ?></span>
+          <span class="error"><?php echo "&nbsp;" . $reasonErr ?></span>
           <textarea class="form-control" name="reason" id="leaveDesc" rows="4" placeholder="Enter Here..." required></textarea>
-                </div>
-          
-                <div class="row ">
+        </div>
+
+        <div class="row  mb-3">
           <label for="adderss" class="form-label"><b> Current Address : </b></label>
           <input type="text" class="form-control" name="Address" id="Address" placeholder="Address during the leave" Required>
-                </div>
-          
-                <!--Acting arrangement details-->
-                <div class="row">
+        </div>
+
+        <!--Acting arrangement details-->
+        <div class="row mb-3">
           <label for="actorDepartment" class="form-label"><b> Acting employee's Department : </b></label>
           <select name="ActorDepartment" onchange="fetchEmployeeIDs(this.value)" required class="form-select form-select">
             <option>Select your Department</option>
@@ -429,34 +422,37 @@ else{
             <option>Fisheries</option>
             <option>Zoology</option>
           </select>
-                </div>
-          
-                <div class="row mb-3">
+        </div>
+
+        <div class="row mb-3">
           <label for="actorEmployeeID" class="form-label"><b> Acting employee's Employee ID : </b></label>
           <select class="form-control" id="ActorEmployeeID" name="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
             <option value="">Select Employee ID</option>
           </select>
-                </div>
-          
-                <div class="row mb-3">
+        </div>
+
+        <div class="row mb-3">
           <label for="Fullname" class="form-label"><b> Acting employee's Fullname : </b></label>
           <input type="text" class="form-control" name="Actorfullname" id="Actorfullname" placeholder="Actor's Fullname" readonly>
-                </div>
-                
-                <div class="row"><input type="submit" name="submit" value="Submit Leave Request" class="btn btn-success btn-lg"></div>
         </div>
-    </form>
-  
-    
-  </div>
 
-  <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
-    <div>
-    <!-- <p class="text-center">Online Leave Application</p> -->
-      <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
+        <div class="row">
+          <input type="submit" name="submit" value="Submit Leave Request" class="btn btn-success btn-lg">
+        </div>
+      </form>
     </div>
-  </footer>
-</html>
+
+
+    <!-- </div> -->
+
+    <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
+      <div>
+        <!-- <p class="text-center">Online Leave Application</p> -->
+        <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
+      </div>
+    </footer>
+
+  </html>
 
 <?php
 }
