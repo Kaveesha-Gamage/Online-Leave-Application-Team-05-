@@ -67,7 +67,7 @@ session_start();
 
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100 pb-4">
 <!-- php code -->
   <?php
   $nameErr = $empIDErr = $emailErr = $phoneErr = $passwordErr = $repasswordErr = $genderErr = "";
@@ -175,87 +175,86 @@ error_reporting(E_ALL);
     </div>
   </nav>
 
-  <h1>Let's Register</h1>
-
-  <div class="container">
-    <div class="alert alert-danger" id="err" role="alert">
+  <div class="container align-self-center justify-self-center my-auto border border-warning-subtle rounded-5 shadow  p-sm-3 m-5" style="border-radius: 15px;">
+    <h1>Let's Register</h1>
+    <div class="container">
+      <div class="alert alert-danger" id="err" role="alert">
+      </div>
+    
+      <!--form-->
+      <form method="POST" autocomplete="off">
+    
+        <!--Employee ID-->
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" name="empID" id="empID" value="<?php echo $empID; ?>"placeholder="Employee ID" required>
+          <label for="empID">Employee ID</label>
+          <span class="error"><?php echo $empIDErr; ?></span>
+        </div>
+        <!--Name-->
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" name="fullname" id="fullname" value="<?php echo $fullname; ?>"placeholder="Fullname" Required>
+          <label for="Fullname">Fullname</label>
+          <span class="error"><?php echo $nameErr; ?></span>
+        </div>
+    
+        <!--Email id-->
+        <div class="form-floating mb-3">
+          <input class="form-control" type="text" name="email" id="email" value="<?php echo $email; ?>" placeholder="Enter your email">
+          <label for="email">Email address</label>
+          <span class="error"><?php echo $emailErr; ?></span>
+        </div>
+    
+        <!--Phone No.-->
+        <div class="form-floating mb-3">
+          <input class="form-control" type="tel" name="phone" id="phone" value="<?php echo $phone; ?>" placeholder="Enter your Phone no.">
+          <label for="phone">Phone No.</label>
+          <span class="error"><?php echo $phoneErr; ?></span>
+        </div>
+    
+        <!--Password.-->
+        <div class="form-floating mb-3">
+          <input class="form-control" type="password" name="password" id="password" value="<?php echo $password; ?>" placeholder="Enter your password">
+          <label for="password">Password</label>
+          <span class="error"><?php echo $passwordErr; ?></span>
+        </div>
+    
+        <!--Confirm Password.-->
+        <div class="form-floating mb-3">
+          <input class="form-control" type="password" name="repassword" id="confirmPassword" value="<?php echo $repassword ?>" placeholder="Re-Enter password">
+          <label for="confirmPassword">Confirm Password</label>
+          <span class="error"><?php echo $repasswordErr; ?></span>
+        </div>
+    
+        <div class="row row-cols-1 row-cols-lg-2 justify-content-between">
+          <div class="col d-flex align-items-centers  mb-3">
+            <label for="gender" class="form-label">Gender:</label>
+            <input type="radio" id="gender" name="gender" class=" form-check-input" <?php if(isset($gender)&&$gender=="Male") echo "checked" ?> value="Male">
+            <label for="male" class=" form-check-label">Male</label>
+            <input type="radio" id="gender" name="gender" class=" form-check-input" <?php if(isset($gender)&&$gender=="Female") echo "checked" ?> value="Female">
+            <label for="female" class=" form-check-label">Female</label>
+            <span class=" error"><?php echo $genderErr; ?></span>
+          </div>
+    
+          <div class="col mb-3">
+            <select name="department" required class="form-select form-select-lg">
+              <option>Select your Department</option>
+              <option>Computer Science</option>
+              <option>Physics</option>
+              <option>Mathematics and Statistics</option>
+              <option>Chemistry</option>
+              <option>Botany</option>
+              <option>Fisheries</option>
+              <option>Zoology</option>
+            </select>
+            <!-- <label>Department : </label> -->
+          </div>
+        </div>
+        <br>
+    
+    
+        <input type="submit" name="submit" value="Submit" class="btn btn-lg btn-success">
+      </form>
     </div>
-  
-    <!--form-->
-    <form method="POST" autocomplete="off">
-      
-      <!--Employee ID-->
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" name="empID" id="empID" value="<?php echo $empID; ?>"placeholder="Employee ID" required>
-        <label for="empID">Employee ID</label>
-        <span class="error"><?php echo $empIDErr; ?></span>
-      </div>
-
-      <!--Name-->
-      <div class="form-floating mb-3">
-        <input type="text" class="form-control" name="fullname" id="fullname" value="<?php echo $fullname; ?>"placeholder="Fullname" Required>
-        <label for="Fullname">Fullname</label>
-        <span class="error"><?php echo $nameErr; ?></span>
-      </div>
-  
-      <!--Email id-->
-      <div class="form-floating mb-3">
-        <input class="form-control" type="text" name="email" id="email" value="<?php echo $email; ?>" placeholder="Enter your email">
-        <label for="email">Email address</label>
-        <span class="error"><?php echo $emailErr; ?></span>
-      </div>
-  
-      <!--Phone No.-->
-      <div class="form-floating mb-3">
-        <input class="form-control" type="tel" name="phone" id="phone" value="<?php echo $phone; ?>" placeholder="Enter your Phone no.">
-        <label for="phone">Phone No.</label>
-        <span class="error"><?php echo $phoneErr; ?></span>
-      </div>
-  
-      <!--Password.-->
-      <div class="form-floating mb-3">
-        <input class="form-control" type="password" name="password" id="password" value="<?php echo $password; ?>" placeholder="Enter your password">
-        <label for="password">Password</label>
-        <span class="error"><?php echo $passwordErr; ?></span>
-      </div>
-  
-      <!--Confirm Password.-->
-      <div class="form-floating mb-3">
-        <input class="form-control" type="password" name="repassword" id="confirmPassword" value="<?php echo $repassword ?>" placeholder="Re-Enter password">
-        <label for="confirmPassword">Confirm Password</label>
-        <span class="error"><?php echo $repasswordErr; ?></span>
-      </div>
-  
-      <div class="row row-cols-1 row-cols-lg-2">
-        <div class="col">
-          <label for="gender">Gender:</label>
-          <input type="radio" id="gender" name="gender" class="form-check-input" <?php if(isset($gender)&&$gender=="Male") echo "checked" ?> value="Male">
-          <label for="male" class="form-check-label">Male</label> 
-          <input type="radio" id="gender" name="gender" class="form-check-input" <?php if(isset($gender)&&$gender=="Female") echo "checked" ?> value="Female">Female
-          <label for="female" class="form-check-label">Female</label> 
-          <span class="error"><?php echo $genderErr; ?></span>
-        </div>
-        
-        <div class="col">
-          <select name="department" required class="form-select form-select-lg">
-            <option>Select your Department</option>
-            <option>Computer Science</option>
-            <option>Physics</option>
-            <option>Mathematics and Statistics</option>
-            <option>Chemistry</option>
-            <option>Botany</option>
-            <option>Fisheries</option>
-            <option>Zoology</option>
-          </select>
-          <!-- <label>Department : </label> -->
-        </div>
-      </div>
-
-      <br>
-  
-  
-      <input type="submit" name="submit" value="Submit" class="btn btn-lg btn-success">
-    </form>
   </div>
 
 

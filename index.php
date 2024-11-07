@@ -41,7 +41,7 @@ session_start();
 </head>
      
 
-<body>
+<body class="d-flex flex-column min-vh-100 pb-4">
 
     <!-- header -->
     <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
@@ -57,10 +57,10 @@ session_start();
    
 
     <!-- body -->
-    <div class="container">
+    <div class="container align-self-center justify-self-center my-auto border border-warning-subtle rounded-5 shadow  p-4" style="border-radius: 15px;">
         <div class="row gx-3">
             <!-- rightComponent -->
-            <div class="rightComponent col-md-7 d-flex justify-content-center align-items-center">
+            <div class="rightComponent col-md-7 d-flex flex-column justify-content-center ">
                 <div class="loginCard container ">
                     <h3 >Welcome !</h3>
                     <hr>
@@ -86,11 +86,11 @@ session_start();
                         </div>
                         <input type="submit" class="btn btn-lg btn-success" name="login" value="Log In">
                         
-                    <div>
-                        <p><a href="forgot_password.php">Forgot Password?</a></p>
-                        <p>Don't you have an account? <a href="signup.php">signup here</a></p>
-                    </div>
-                </form>
+                    </form>
+                </div>
+                <div class="px-4 mt-4 d-flex justify-content-between">
+                    <p><a href="forgot_password.php" class="text-decoration-none text-info-emphasis">Forgot Password?</a></p>
+                    <p>Don't you have an account? <a href="signup.php" class="text-decoration-none text-info-emphasis">Signup here</a></p>
                 </div>
             </div>
             <!-- rightComponent ends -->
@@ -103,7 +103,6 @@ session_start();
         </div>
     </div>
     <!-- body ends -->
-
 
 
     <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
