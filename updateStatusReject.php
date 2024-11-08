@@ -15,6 +15,13 @@ if (!isset($_SESSION["sess_user"])) {
     // Get parameters and escape them
     $eid = $_GET['eid'];
     $descr = $_GET['descr'];
+    $reason = $_GET['reason'];
+
+    // Prepare the SQL statement for updating the rejection reason
+    $stmt2 = $conn->prepare("UPDATE leaves SET rejection_reason=? WHERE eid=? AND descr=?");
+    $stmt2->bind_param("sss", $reason, $eid, $descr);
+    $stmt2->execute();
+
     $rejection_reason = isset($_GET['rejection_reason']) ? $_GET['rejection_reason'] : '';  // Check if rejection_reason is set
 
     // Prepare the SQL statement for updating the status
