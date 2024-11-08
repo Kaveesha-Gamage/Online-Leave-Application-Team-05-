@@ -17,7 +17,7 @@ else{
 ?>
 
 <?php 
-  $reasonErr = $absenceErr = $absencePlusReason = $ActorEmployeeID = $absence = "";
+  $fileErr = $reasonErr = $absenceErr = $absencePlusReason = $ActorEmployeeID = $absence = "";
   global $leaveApplicationValidate;
   if(isset($_POST['submit'])){
     if(empty($_POST['absence'])){
@@ -56,6 +56,34 @@ else{
     else{
       $absencePlusReason = $absence." : ".$reason;
       $leaveApplicationValidate = true;
+    }
+
+    $fileErr = '';
+
+    // File upload handling
+    $uploadOk = true;
+    $filePath = "";
+
+    if (isset($_FILES['leaveFile']) && $_FILES['leaveFile']['error'] == UPLOAD_ERR_OK) {
+      $target_dir = "uploads/";
+      $filePath = $target_dir . basename($_FILES["leaveFile"]["name"]);
+      $fileType = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+
+      // Allow only PDF files
+      if ($fileType != "pdf") {
+        echo '<script>alert("Only PDF files are allowed.")</script>';
+        $uploadOk = false;
+      } else {
+        // Move file to the target directory
+        if (!move_uploaded_file($_FILES["leaveFile"]["tmp_name"], $filePath)) {
+          echo '<script>alert("Error uploading file.")</script>';
+          $uploadOk = false;
+        }
+      }
+    } else if (isset($_FILES['leaveFile']) && $_FILES['leaveFile']['error'] != UPLOAD_ERR_NO_FILE) {
+      // Handle errors other than "no file uploaded"
+      echo '<script>alert("File upload error: ' . $_FILES['leaveFile']['error'] . '")</script>';
+      $uploadOk = false;
     }
 
     if(empty($_POST['ActorDepartment'])){
@@ -101,14 +129,15 @@ else{
       $query = "INSERT INTO leaves(eid, empID, ename, descr, fromdate, todate, ActorDepartment, ActorEmployeeID, Actorfullname, status) VALUES({$row['id']},'{$empID}','{$employeeFullName}','$absencePlusReason', '$fromdate', '$todate', '$ActorDepartment', '$ActorEmployeeID','$Actorfullname', '$status')";
       $execute = mysqli_query($conn,$query);
       if($execute){
-        $mail = new PHPMailer(true);
+         // Configure PHPMailer
+         $mail = new PHPMailer(true);
 
          $mail->SMTPDebug = SMTP::DEBUG_SERVER;
          $mail->isSMTP();
          $mail->Host = "smtp.gmail.com";
          $mail->SMTPAuth = true;
-         $mail->Username = "kvgz.1218@gmail.com";  // replace with actual email
-         $mail->Password = "juodyixyzrndffhg";      // replace with actual password
+         $mail->Username = "kvgz.1218@gmail.com";  // replace with your actual email
+         $mail->Password = "juodyixyzrndffhg";      // replace with your actual password
          $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
          $mail->Port = 465;
          $mail->SMTPSecure = "ssl";
@@ -119,7 +148,7 @@ else{
  
          // Email settings
          $mail->setFrom("kvgz.1218@gmail.com", "Leave Management System");
-         $mail->addAddress("testdata1324@gmail.com");  // admin email address
+         $mail->addAddress("leavemanagementsystem.dcs@outlook.com");  // admin email address
          $mail->isHTML(true);
          $mail->Subject = "New Leave Application Submitted by $employeeFullName";
          $mail->Body = "
@@ -131,8 +160,8 @@ else{
            <p><strong>To Date:</strong> $todate</p>
            <p><strong>Reason:</strong> $reason</p>
          ";
-         
-        if($mail->send()) {
+ 
+         if($mail->send()) {
           echo '<script>alert("Leave Application Submitted and notification sent to admin Successfully! Please wait for approval status.")</script>';
         } else {
           echo '<script>alert("Leave submitted but email notification failed: ' . $mail->ErrorInfo . '")</script>';
@@ -280,55 +309,54 @@ else{
     }
   </script>
 
-  <script>
-      const validateAndSubmit = () => {
-          let desc = document.getElementById('leaveDesc').value;
-          let errDiv = document.getElementById('err');
-          let absenceRadios = document.getElementsByName("absence[]");
-          let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
-          let errMsg = [];
+<script>
+    const validateAndSubmit = () => {
+        let desc = document.getElementById('leaveDesc').value;
+        let errDiv = document.getElementById('err');
+        let absenceRadios = document.getElementsByName("absence[]");
+        let selectedAbsence = Array.from(absenceRadios).some(radio => radio.checked);
+        let errMsg = [];
 
-          if (desc === "") {
-              errMsg.push("Please enter the reason for leave.");
-          }
-          if (!selectedAbsence) {
-              errMsg.push("Please select the type of Leave.");
-          }
-          
-          if (errMsg.length > 0) {
-              errDiv.style.display = "block";
-              errDiv.innerHTML = errMsg.join("<br/>");
-              scrollTo(0, 0);
-              return false; // Prevent form submission if validation fails
-          }
+        if (desc === "") {
+            errMsg.push("Please enter the reason for leave.");
+        }
+        if (!selectedAbsence) {
+            errMsg.push("Please select the type of Leave.");
+        }
+        
+        if (errMsg.length > 0) {
+            errDiv.style.display = "block";
+            errDiv.innerHTML = errMsg.join("<br/>");
+            scrollTo(0, 0);
+            return false; // Prevent form submission if validation fails
+        }
 
-          alert("Leave Application Submitted Successfully!");
-          return true; // Allow form submission if validation passes
-      };
+        alert("Leave Application Submitted. Please wait for approval status!");
+        return true; // Allow form submission if validation passes
+    };
   </script>
 
   <script>
-      function updateToDate() {
-          // Get the selected "From" date
-          const fromDate = document.querySelector('input[name="fromdate"]').value;
-          const toDateField = document.querySelector('input[name="todate"]');
+    function updateToDate() {
+    const fromDate = document.querySelector('input[name="fromdate"]').value;
+    const toDateField = document.querySelector('input[name="todate"]');
 
-          if (fromDate) {
-              // Set the minimum date for "To" date based on "From" date
-              toDateField.min = fromDate;
-          }
+      if (fromDate) {
+        // Set the minimum date for "To Date" to be the selected "From Date"
+        toDateField.min = fromDate;
       }
+    }
 
-      function validateDates() {
-          const fromDate = document.querySelector('input[name="fromdate"]').value;
-          const toDate = document.querySelector('input[name="todate"]').value;
-          
-          if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
-              alert("The 'To' date cannot be earlier than the 'From' date.");
-              return false; // Prevent form submission
-          }
-          return true; // Allow form submission if dates are valid
+    function validateDates() {
+      const fromDate = document.querySelector('input[name="fromdate"]').value;
+      const toDate = document.querySelector('input[name="todate"]').value;
+
+      if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
+        alert("The 'To' date cannot be earlier than the 'From' date.");
+        return false; // Prevent form submission if invalid
       }
+      return true; // Allow form submission if dates are valid
+    }
   </script>
 
 
@@ -360,9 +388,8 @@ else{
     <div class="alert alert-danger" id="err" role="alert">
     </div>
   
-    <form method="POST">
-      
-  
+    <form method="POST" onsubmit="return validateDates()">
+
     <label><b>Select Leave Type :</b></label>
         <!-- Error message if type of absence isn't selected -->
         <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br/>
@@ -388,12 +415,12 @@ else{
         </div> 
         <br/>
   
-      <div class="mb-3 ">
+        <div class="mb-3">
         <label for="dates"><b>From -</b></label>
-        <input type="date" name="fromdate" min="<?= date('Y-m-d'); ?>" onchange="updateToDate()">
+        <input type="date" name="fromdate" onchange="updateToDate()">
   
         <label for="dates"><b>To -</b></label>
-        <input type="date" name="todate" min="<?= date('Y-m-d'); ?>">
+        <input type="date" name="todate">
       </div>
       
   
@@ -408,6 +435,13 @@ else{
         <label for="adderss" class="form-label"><b> Address of the applicant during the leave : </b></label>
         <input type="text" class="form-control" name="Address" id="Address" placeholder="Address during the leave" Required>
       </div>
+      
+      <div class="mb-3">
+          <label for="fileUpload" class="form-label"><b>Upload proof document regarding your leave (PDF only):</b></label>
+          <input type="file" name="fileUpload" id="fileUpload" class="form-control" accept=".pdf" required>
+          <span class="error"><?php echo "&nbsp;" . $fileErr; ?></span>
+      </div>
+
 
       <!--Acting arrangement details-->
       <div class="mb-3">
