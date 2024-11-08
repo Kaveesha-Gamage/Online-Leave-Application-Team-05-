@@ -67,7 +67,7 @@ session_start();
 
 </head>
 
-<body class="d-flex flex-column min-vh-100 pb-4">
+<body class="d-flex flex-column min-vh-100" style="padding-bottom: 50px !important;">
   <!-- php code -->
   <?php
   $nameErr = $empIDErr = $emailErr = $phoneErr = $passwordErr = $repasswordErr = $genderErr = "";
@@ -168,7 +168,7 @@ session_start();
     </div>
   </nav>
 
-  <div class="container align-self-center justify-self-center my-auto border border-warning-subtle rounded-5 shadow  p-sm-3 m-5 mt-3" style="border-radius: 15px;">
+  <div class="container w-50 align-self-center justify-self-center my-auto border border-warning-subtle rounded-5 shadow  p-sm-2" style="border-radius: 15px; margin-top:50px !important; margin-bottom:50px !important;">
     <h1>Let's Register</h1>
     <div class="container">
       <div class="alert alert-danger" id="err" role="alert">
@@ -242,14 +242,13 @@ session_start();
             <!-- <label>Department : </label> -->
           </div>
         </div>
-        <br>
-
 
         <input type="submit" name="submit" value="Submit" class="btn btn-lg btn-primary fw-bolder" style="background-color: #0f0283">
       </form>
     </div>
   </div>
 
+  <br>
 
 
   <!--Footer-->
