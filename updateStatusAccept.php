@@ -9,7 +9,7 @@ use PHPMailer\PHPMailer\Exception;
 require 'vendor/autoload.php';
 session_start();
 
-if(!isset($_SESSION["sess_user"])){
+if (!isset($_SESSION["sess_user"])) {
     header("Location: index.php");
     exit(); // Ensure no further code is executed after redirection
 } else {
@@ -21,11 +21,11 @@ if(!isset($_SESSION["sess_user"])){
     $stmt = $conn->prepare("UPDATE leaves SET status='Accepted' WHERE eid=? AND descr=?");
     $stmt->bind_param("ss", $eid, $descr);
 
-    if($stmt->execute()){
+    if ($stmt->execute()) {
         echo 'Saved!!';
 
         // Fetch the user's email and name (adjust the column name as needed)
-        $userStmt = $conn->prepare("SELECT email, fullname FROM users WHERE id=?"); 
+        $userStmt = $conn->prepare("SELECT email, fullname FROM users WHERE id=?");
         $userStmt->bind_param("s", $eid);
         $userStmt->execute();
         $userStmt->bind_result($userEmail, $userName);
@@ -78,15 +78,14 @@ if(!isset($_SESSION["sess_user"])){
                 echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
         }
-        } else {
+    } else {
         echo "Query Error: " . $stmt->error;
-        }
+    }
 
     // Close the update statement
     $stmt->close();
-    }
+}
 
 // Display errors
 ini_set('display_errors', true);
 error_reporting(E_ALL);
-?>
