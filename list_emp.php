@@ -141,7 +141,11 @@ if (!isset($_SESSION["sess_user"])) {
                                         <td>{$row1['email']}</td>
                                         <td>{$row1['gender']}</td>
                                         <td>{$row1['phone']}</td>
-                                        <td class=\"text-center\"><a href=\"delete_emp.php?id={$row1['id']}\"><button class='btn-danger btn-sm px-3' >Delete</button></a></td>
+                                        <td>
+                                        <a href='delete_emp.php?id={$row1['id']}' onclick='return confirmDelete();'>
+                                            <button class='btn btn-danger btn-sm'>Delete</button>
+                                        </a>
+                                    </td>
                                         
                                       </tr>";
                                 $cnt++;
@@ -164,6 +168,23 @@ if (!isset($_SESSION["sess_user"])) {
             <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
         </div>
     </footer>
+
+    <!-- JavaScript for the confirmation prompt and success alert -->
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this user?");
+        }
+
+        // Show success alert if deletion was successful
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('delete_success')) {
+                alert("Employee record deleted successfully.");
+                // Remove the delete_success parameter from the URL after showing the alert
+                history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+    </script>
 </body>
 
 </html>

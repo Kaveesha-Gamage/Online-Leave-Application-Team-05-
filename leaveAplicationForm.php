@@ -19,7 +19,40 @@ if (!isset($_SESSION["sess_user"])) {
   $fileErr = $reasonErr = $absenceErr = $absencePlusReason = $ActorEmployeeID = $absence = "";
   global $leaveApplicationValidate;
   if (isset($_POST['submit'])) {
-    $leaveApplicationValidate = true;
+    if (empty($_POST['absence'])) {
+      $absenceErr = "Please select absence type";
+      $leaveApplicationValidate = false;
+    } else {
+      $arr = $_POST['absence'];
+      $absence = implode(",", $arr);
+      $leaveApplicationValidate = true;
+    }
+
+    if (empty($_POST['fromdate'])) {
+      $fromdateErr = "Please Enter starting date";
+      $leaveApplicationValidate = false;
+    } else {
+      $fromdate = mysqli_real_escape_string($conn, $_POST['fromdate']);
+      $leaveApplicationValidate = true;
+    }
+
+    if (empty($_POST['todate'])) {
+      $todateErr = "Please Enter ending date";
+      $leaveApplicationValidate = false;
+    } else {
+      $todate = mysqli_real_escape_string($conn, $_POST['todate']);
+      $leaveApplicationValidate = true;
+    }
+
+    $reason = mysqli_real_escape_string($conn, $_POST['reason']);
+    if (empty($reason)) {
+      $reasonErr = "Please give reason for the leave in detail";
+      $leaveApplicationValidate = false;
+    } else {
+      $absencePlusReason = $absence . " : " . $reason;
+      $leaveApplicationValidate = true;
+    }
+
     $fileErr = '';
 
     // File upload handling
@@ -48,22 +81,29 @@ if (!isset($_SESSION["sess_user"])) {
       $uploadOk = false;
     }
 
-    // Save leave request if upload was successful
-    if ($leaveApplicationValidate && $uploadOk)
-      // Fetch employee details
-      $empID = $_SESSION["sess_user"]; // Updated to fetch empID from session
-    $eid_query = mysqli_query($conn, "SELECT id, email, fullname FROM users WHERE empID='" . $empID . "'");
-    $row = mysqli_fetch_array($eid_query);
+    if (empty($_POST['ActorDepartment'])) {
+      $actIDErr = "Please Enter Actor's Department";
+      $leaveApplicationValidate = false;
+    } else {
+      $ActorDepartment = mysqli_real_escape_string($conn, $_POST['ActorDepartment']);
+      $leaveApplicationValidate = true;
+    }
 
-    // Extract employee's email and full name
-    $employeeEmail = $row['email'];
-    $employeeFullName = $row['fullname'];
+    if (empty($_POST['ActorEmployeeID'])) {
+      $actIDErr = "Please Enter Actor's EmployeeID";
+      $leaveApplicationValidate = false;
+    } else {
+      $ActorEmployeeID = mysqli_real_escape_string($conn, $_POST['ActorEmployeeID']);
+      $leaveApplicationValidate = true;
+    }
 
-    // Insert leave request with file path
-    $query = "INSERT INTO leaves(eid, empID, ename, descr, fromdate, todate, ActorDepartment, ActorEmployeeID, Actorfullname, status, file_path) 
-                VALUES({$row['id']}, '{$empID}', '{$employeeFullName}', '$absencePlusReason', '$fromdate', '$todate', '$ActorDepartment', '$ActorEmployeeID', '$Actorfullname', '$status', '$filePath')";
-
-    $execute = mysqli_query($conn, $query);
+    if (empty($_POST['Actorfullname'])) {
+      $actnameErr = "Please Enter Actor's name";
+      $leaveApplicationValidate = false;
+    } else {
+      $Actorfullname = mysqli_real_escape_string($conn, $_POST['Actorfullname']);
+      $leaveApplicationValidate = true;
+    }
 
     $status = "Pending";
 
@@ -81,14 +121,15 @@ if (!isset($_SESSION["sess_user"])) {
       $query = "INSERT INTO leaves(eid, empID, ename, descr, fromdate, todate, ActorDepartment, ActorEmployeeID, Actorfullname, status) VALUES({$row['id']},'{$empID}','{$employeeFullName}','$absencePlusReason', '$fromdate', '$todate', '$ActorDepartment', '$ActorEmployeeID','$Actorfullname', '$status')";
       $execute = mysqli_query($conn, $query);
       if ($execute) {
+        // Configure PHPMailer
         $mail = new PHPMailer(true);
 
         $mail->SMTPDebug = SMTP::DEBUG_SERVER;
         $mail->isSMTP();
         $mail->Host = "smtp.gmail.com";
         $mail->SMTPAuth = true;
-        $mail->Username = "kvgz.1218@gmail.com";  // replace with actual email
-        $mail->Password = "juodyixyzrndffhg";      // replace with actual password
+        $mail->Username = "kvgz.1218@gmail.com";  // replace with your actual email
+        $mail->Password = "juodyixyzrndffhg";      // replace with your actual password
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->Port = 465;
         $mail->SMTPSecure = "ssl";
@@ -99,7 +140,7 @@ if (!isset($_SESSION["sess_user"])) {
 
         // Email settings
         $mail->setFrom("kvgz.1218@gmail.com", "Leave Management System");
-        $mail->addAddress("testdata1324@gmail.com");  // admin email address
+        $mail->addAddress("leavemanagementsystem.dcs@outlook.com");  // admin email address
         $mail->isHTML(true);
         $mail->Subject = "New Leave Application Submitted by $employeeFullName";
         $mail->Body = "
@@ -143,14 +184,14 @@ if (!isset($_SESSION["sess_user"])) {
     <style>
       h1 {
         text-align: center;
-        font-size: 2rem;
+        font-size: 2.5em;
         font-weight: bold;
         padding-top: 1em;
         margin-bottom: -0.5em;
       }
 
       form {
-        padding: 30px;
+        padding: 40px;
       }
 
       input,
@@ -161,7 +202,7 @@ if (!isset($_SESSION["sess_user"])) {
       }
 
       label {
-        /* margin-top: 0.5em; */
+        margin-top: 0.5em;
         font-size: 1.1em !important;
       }
 
@@ -283,19 +324,18 @@ if (!isset($_SESSION["sess_user"])) {
           return false; // Prevent form submission if validation fails
         }
 
-        alert("Leave Application Submitted Successfully!");
+        alert("Leave Application Submitted. Please wait for approval status!");
         return true; // Allow form submission if validation passes
       };
     </script>
 
     <script>
       function updateToDate() {
-        // Get the selected "From" date
         const fromDate = document.querySelector('input[name="fromdate"]').value;
         const toDateField = document.querySelector('input[name="todate"]');
 
         if (fromDate) {
-          // Set the minimum date for "To" date based on "From" date
+          // Set the minimum date for "To Date" to be the selected "From Date"
           toDateField.min = fromDate;
         }
       }
@@ -306,7 +346,7 @@ if (!isset($_SESSION["sess_user"])) {
 
         if (fromDate && toDate && new Date(toDate) < new Date(fromDate)) {
           alert("The 'To' date cannot be earlier than the 'From' date.");
-          return false; // Prevent form submission
+          return false; // Prevent form submission if invalid
         }
         return true; // Allow form submission if dates are valid
       }
@@ -318,15 +358,15 @@ if (!isset($_SESSION["sess_user"])) {
   <body>
     <!--Navbar-->
     <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
-      <div class="container justify-content-end justify-content-sm-between">
-        <a class="navbar-brand d-none d-sm-block " href="#">Online Leave Application</a>
+      <div class="container justify-content-center justify-content-md-between">
+        <a class="navbar-brand" href="#">Online Leave Application</a>
         <ul class="nav justify-content-end align-items-center">
+
           <li class="nav-item">
-            <a class="nav-link hover" href="myhistory.php" style="color:white;">My Leave History</a>
+            <a class="nav-link" href="myhistory.php" style="color:white;">My Leave History</a>
           </li>
           <li class="nav-item">
             <button id="logout" onclick="window.location.href='logout.php';" class="btn btn-sm btn-danger px-3">Logout</button>
-
           </li>
         </ul>
 
@@ -335,12 +375,13 @@ if (!isset($_SESSION["sess_user"])) {
     </nav>
 
 
-    <div class="container w-50 border border-warning-subtle rounded-5 shadow p-sm-4 my-5 pb-4" style="border-radius: 15px;">
-      <div class="alert alert-danger" id="err" role="alert" style="display: none;">
+
+    <div class="container w-md-50 border border-warning-subtle rounded-5 shadow p-sm-4 my-5 pb-4" style="border-radius: 15px;">
+      <div class="alert alert-danger" id="err" role="alert">
       </div>
       <h1>Leave Application</h1>
 
-      <form method="POST" onsubmit="return validateAndSubmit();">
+      <form method="POST" onsubmit="return validateDates()">
 
         <div class="col">
           <div class="row row-cols-1">
@@ -442,12 +483,9 @@ if (!isset($_SESSION["sess_user"])) {
           <input type="submit" name="submit" value="Submit Leave Request" class="btn btn-primary btn-lg fw-bolder m-0 mt-3" style="background-color: #0f0283">
         </div>
       </form>
+
+
     </div>
-
-    <br>
-
-
-    <!-- </div> -->
 
     <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
       <div>

@@ -168,7 +168,7 @@ session_start();
     </div>
   </nav>
 
-  <div class="container w-50 align-self-center justify-self-center my-auto border border-warning-subtle rounded-5 shadow  p-sm-2" style="border-radius: 15px; margin-top:50px !important; margin-bottom:50px !important;">
+  <div class="container w-md-50 align-self-center justify-self-center my-auto border border-warning-subtle rounded-5 shadow  p-sm-2" style="border-radius: 15px; margin-top:50px !important; margin-bottom:50px !important;">
     <h1>Let's Register</h1>
     <div class="container">
       <div class="alert alert-danger" id="err" role="alert">

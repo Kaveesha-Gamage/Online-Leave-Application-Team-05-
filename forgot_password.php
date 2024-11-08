@@ -10,20 +10,20 @@ require 'vendor/autoload.php';
 
 if (isset($_POST['submit'])) {
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    
+
     // Check if email exists
     $query = "SELECT * FROM users WHERE email='$email'";
     $result = mysqli_query($conn, $query);
-    
+
     if (mysqli_num_rows($result) > 0) {
         // Generate token and expiration
         $token = bin2hex(random_bytes(50));
         $expires = date("U") + 1800; // 30 minutes from now
-        
+
         // Store token and expiration in database
         $query = "UPDATE users SET reset_token='$token', reset_expires='$expires' WHERE email='$email'";
         mysqli_query($conn, $query);
-        
+
         // Set up PHPMailer
         $mail = new PHPMailer(true);
         try {
@@ -61,6 +61,7 @@ if (isset($_POST['submit'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -70,8 +71,9 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="css/style.css">
     <title>Forgot Password</title>
 </head>
+
 <body class="d-flex flex-column align-items-center justify-content-center">
-    <div class="container w-50 border border-warning-subtle rounded-5 shadow  p-5 mx-auto my-auto" style="border-radius: 15px;">
+    <div class="container w-md-50 border border-warning-subtle rounded-5 shadow  p-5 mx-auto my-auto" style="border-radius: 15px;">
         <h2 class="text-center mb-3">Reset Password</h2>
         <form action="forgot_password.php" method="POST">
             <div class="d-flex flex-column justify-content-between gy-4">
@@ -81,4 +83,5 @@ if (isset($_POST['submit'])) {
         </form>
     </div>
 </body>
+
 </html>
