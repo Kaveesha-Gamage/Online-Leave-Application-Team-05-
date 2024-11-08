@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 31, 2024 at 10:26 AM
+-- Generation Time: Nov 08, 2024 at 12:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -39,21 +39,18 @@ CREATE TABLE `leaves` (
   `ActorEmployeeID` varchar(200) NOT NULL,
   `Actorfullname` varchar(200) NOT NULL,
   `status` varchar(255) NOT NULL,
-  `rejection_reason` varchar(255) DEFAULT NULL
+  `rejection_reason` varchar(255) DEFAULT NULL,
+  `file_path` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `leaves`
 --
 
-INSERT INTO `leaves` (`id`, `eid`, `empID`, `ename`, `descr`, `fromdate`, `todate`, `ActorDepartment`, `ActorEmployeeID`, `Actorfullname`, `status`, `rejection_reason`) VALUES
-(46, 7, 'E001', 'user-1', 'Vacation : ..............', '2024-10-31', '2024-11-02', 'Select your Department', 'E002', 'abcd user ', 'Pending', NULL),
-(47, 9, 'E002', 'user-2', 'Vacation : lorem ipusm lorem ipusm lorem ipusm lorem ipusm ', '2024-11-01', '2024-11-02', 'Chemistry', 'E002', 'abcd user ', 'Accepted', NULL),
-(48, 7, 'E001', 'user-1', 'Other : reasons for your leave days', '2024-10-31', '2024-11-03', 'Computer Science', 'E002', 'user_2', 'Accepted', NULL),
-(51, 7, 'E001', 'user-1', 'Casual : casual leave under personal reason.', '2024-10-31', '2024-11-02', 'Computer Science', 'E002', 'user_2', 'Rejected', NULL),
-(52, 7, 'E001', 'user-1', 'Casual : leave request under personal reason.', '2024-11-01', '2024-11-03', 'Mathematics and Statistics', 'E003', 'user_3', 'Rejected', 'no more leaves available.'),
-(53, 7, 'E001', 'user-1', ' : lorem ipusm lorem ipusm lorem ipusm lorem ipusm ', '2024-10-24', '2024-10-31', 'Physics', '', 'user-9', 'Pending', NULL),
-(54, 7, 'E001', 'user-1', ' : lorem ipusm lorem ipusm lorem ipusm lorem ipusm ', '2024-10-24', '2024-10-31', 'Physics', '', 'user-9', 'Pending', NULL);
+INSERT INTO `leaves` (`id`, `eid`, `empID`, `ename`, `descr`, `fromdate`, `todate`, `ActorDepartment`, `ActorEmployeeID`, `Actorfullname`, `status`, `rejection_reason`, `file_path`) VALUES
+(1, 3, 'E002', 'user-2', 'Sick : ...............', '2024-11-09', '2024-11-12', 'Physics', 'E002', 'user-2', 'Rejected', NULL, NULL),
+(2, 3, 'E002', 'user-2', 'Casual : ............', '2024-11-09', '2024-11-11', 'Physics', 'E002', 'user-2', 'Rejected', 'mmmmmmmmmmmmm', NULL),
+(3, 3, 'E002', 'user-2', 'Sick : safsjskjhfsdfvbvfsfhes', '2024-11-14', '2024-11-16', 'Physics', 'E002', 'user-2', 'Rejected', 'm.m.m.m.m.m', NULL);
 
 -- --------------------------------------------------------
 
@@ -70,27 +67,25 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `gender` varchar(150) NOT NULL,
   `department` varchar(200) NOT NULL,
-  `phone` varchar(150) NOT NULL
+  `phone` varchar(150) NOT NULL,
+  `reset_token` varchar(255) NOT NULL,
+  `reset_expires` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `fullname`, `empID`, `password`, `type`, `email`, `gender`, `department`, `phone`) VALUES
-(1, 'TEST_ADMIN', 'Admin', '$2y$10$OWEyMDU2YjUzMjdmZWI0Z.aDy53IvthsNNJHAR8lZmF4b5QR4qVwS', 'admin', 'testdata1324@gmail.com', 'Male', '', '12345678'),
-(7, 'user-1', 'E001', '$2y$10$NzM1NzAyNzMwZTJhYjA5YeMfi9IdUIkruR197l8QOPDwTAfTZFL7y', 'employee', 'testdata1324@gmail.com', 'Male', 'Computer Science', '0123456789'),
-(9, 'user-2', 'E002', '$2y$10$NDg2Yjk0YjBjZGI1NTY4MeuFeKkGhxDjfy050IQGGbK4HSG7lD4aC', 'employee', 'testdata1324@gmail.com', 'Female', 'Physics', '0123456789'),
-(10, 'user-3', 'E003', '$2y$10$ZjUyNmZhYWQ4MjJlZTJjZOpDqayEEkiOMSGoxp1vw0XozOBLSlIJu', 'employee', 'testdata1324@gmail.com', 'Female', 'Mathematics and Statistics', '0123456789'),
-(11, 'user-4', 'E004', '$2y$10$ZDdlMTcwMTgwZDU3YzJlYeAiw8o7AVCuCaGgyJV/eBCWChX3PuL4O', 'employee', 'testdata1324@gmail.com', 'Male', 'Chemistry', '0123456789'),
-(12, 'user-5', 'E005', '$2y$10$NWU1MzhjYjRhOWE3NDg4ZOKA.6QX2YIIW5wWB5Ck.mMPlfc5A3Vxa', 'employee', 'testdata1324@gmail.com', 'Male', 'Botany', '0123456789'),
-(13, 'user-6', 'E006', '$2y$10$M2Y3OTNmZjZjNzEyZThmN.IqIJaruzlKaEHakux6bujaXy8sBeqf2', 'employee', 'testdata1324@gmail.com', 'Female', 'Fisheries', '0123456789'),
-(14, 'user-7', 'E007', '$2y$10$NTliMDUzOWY4MDY5NDdkYOuwWD6TA2WTU5sxhWdby5DZ5pnn/4B8a', 'employee', 'testdata1324@gmail.com', 'Male', 'Zoology', '0123456789'),
-(15, 'user-8', 'E008', '$2y$10$YWFhNDk4YTVjZGE1Y2UzYus1C4iq85Y1E.O0G9W7pCP.eOEu1oRlC', 'employee', 'testdata1324@gmail.com', 'Male', 'Computer Science', '0123456789'),
-(16, 'user-9', 'E009', '$2y$10$MWM5YTVlMGIwMmE2MGE3ZO67338bbyYd0RkIu7gdPhXrZP9V3nRoy', 'employee', 'testdata1324@gmail.com', 'Female', 'Physics', '0123456789'),
-(17, 'user-10', 'E010', '$2y$10$YWEwOWVhMTczOGFjNmRjYuQjggQLueh7ceHaUmXXo8XIaK17Pl40W', 'employee', 'testdata1324@gmail.com', 'Male', 'Computer Science', '0123456789'),
-(18, 'user-11', 'E011', '$2y$10$MjAwYTdmMDgwNjZiNzE4NeJP3OEbVmiJvbqwZEP.cGqCxwM/0So3S', 'employee', 'testdata1324@gmail.com', 'Male', 'Physics', '0123456789'),
-(19, 'user-12', 'E012', '$2y$10$YTBmMGIyMzM5NDY0NDkxNOlvqPmobdgfQigDc5B8jCYQz8USYsLzS', 'employee', 'testdata1324@gmail.com', 'Female', 'Physics', '0123456789');
+INSERT INTO `users` (`id`, `fullname`, `empID`, `password`, `type`, `email`, `gender`, `department`, `phone`, `reset_token`, `reset_expires`) VALUES
+(1, 'ADMIN', 'Admin', '$2y$10$OWEyMDU2YjUzMjdmZWI0Z.aDy53IvthsNNJHAR8lZmF4b5QR4qVwS', 'admin', 'leavemanagementsystem.dcs@outlook.com', 'Male', '', '12345678', '', 0),
+(2, 'user-1', 'E001', '$2y$10$MWMzNGRlNDFhZTkwZWUzMutHsu0Bp9R73Kd5ASvnbPf/D8aTtSDb.', 'employee', 'testdata1324@gmail.com', 'Male', 'Computer Science', '0712345678', '', 0),
+(3, 'user-2', 'E002', '$2y$10$YzVkNzcyZTU2ZWExYmYwNOjWgYvQX2fhdhWnIwGLGv1RD4ytu3GeW', 'employee', 'user2@gmail.com', 'Female', 'Physics', '0742565651', '', 0),
+(4, 'user-3', 'E003', '$2y$10$NTBmMjkwMTgwYjljZGFlYOEvWSU7vHjs1Po8ZMSsCeDmwO9vmZxpy', 'employee', 'user3@gmail.com', 'Female', 'Mathematics and Statistics', '0752346514', '', 0),
+(5, 'user-4', 'E004', '$2y$10$ZWMwOTA4ODU2YzEwMDVjNO1fjpBa1O425zymKO4TtRUYuNCiYcy2.', 'employee', 'user4@gmail.com', 'Male', 'Chemistry', '0760132446', '', 0),
+(6, 'user-5', 'E005', '$2y$10$MjFlNzdhZDI1MTI0MWJmNuYTe/Dyd1TCmS.rTpbaxDJHVhQzFeiEG', 'employee', 'user5@gmail.com', 'Male', 'Botany', '0112465464', '', 0),
+(7, 'user-6', 'E006', '$2y$10$MjdhNDI1NTMzZWY2ZWE0YOslbaRvAxob3xOHf9.HcXEYKFvQTM2sq', 'employee', 'user6@gmail.com', 'Male', 'Fisheries', '0750321564', '', 0),
+(8, 'user-7', 'E007', '$2y$10$MjhhZGRhNDk3NzI4ZmFlMuIJ2V6yzItz7fouebdO6zypk6qclO2v2', 'employee', 'user7@gmail.com', 'Male', 'Computer Science', '0741221564', '', 0),
+(9, 'user-8', 'E008', '$2y$10$YzBjZWNjZjY4MDdkNTJlM.i9zEQocKOU9GtdbrA98yJuc2izezo8e', 'employee', 'user8@gmail.com', 'Male', 'Computer Science', '0724658457', '', 0);
 
 --
 -- Indexes for dumped tables
@@ -116,13 +111,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `leaves`
 --
 ALTER TABLE `leaves`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
