@@ -358,9 +358,9 @@ if (!isset($_SESSION["sess_user"])) {
   <body>
     <!--Navbar-->
     <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
+      <div class="container justify-content-center justify-content-md-between">
         <a class="navbar-brand" href="#">Online Leave Application</a>
-        <ul class="nav justify-content-end">
+        <ul class="nav justify-content-end align-items-center">
 
           <li class="nav-item">
             <a class="nav-link" href="myhistory.php" style="color:white;">My Leave History</a>
@@ -376,7 +376,7 @@ if (!isset($_SESSION["sess_user"])) {
 
 
 
-    <div class="container w-50 border border-warning-subtle rounded-5 shadow p-sm-4 my-5 pb-4" style="border-radius: 15px;">
+    <div class="container w-md-50 border border-warning-subtle rounded-5 shadow p-sm-4 my-5 pb-4" style="border-radius: 15px;">
       <div class="alert alert-danger" id="err" role="alert">
       </div>
       <h1>Leave Application</h1>
@@ -489,7 +489,7 @@ if (!isset($_SESSION["sess_user"])) {
 
     <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
       <div>
-        <p class="text-center">Online Leave Application</p>
+        <!-- <p class="text-center">Online Leave Application</p> -->
         <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
       </div>
     </footer>

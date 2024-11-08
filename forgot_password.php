@@ -73,7 +73,7 @@ if (isset($_POST['submit'])) {
 </head>
 
 <body class="d-flex flex-column align-items-center justify-content-center">
-    <div class="container w-50 border border-warning-subtle rounded-5 shadow  p-5 mx-auto my-auto" style="border-radius: 15px;">
+    <div class="container w-md-50 border border-warning-subtle rounded-5 shadow  p-5 mx-auto my-auto" style="border-radius: 15px;">
         <h2 class="text-center mb-3">Reset Password</h2>
         <form action="forgot_password.php" method="POST">
             <div class="d-flex flex-column justify-content-between gy-4">
