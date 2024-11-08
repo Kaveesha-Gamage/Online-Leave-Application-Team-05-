@@ -335,7 +335,7 @@ if (!isset($_SESSION["sess_user"])) {
     </nav>
 
 
-    <div class="container border border-warning-subtle rounded-5 shadow p-sm-4 my-5 pb-4" style="border-radius: 15px;">
+    <div class="container w-50 border border-warning-subtle rounded-5 shadow p-sm-4 my-5 pb-4" style="border-radius: 15px;">
       <div class="alert alert-danger" id="err" role="alert" style="display: none;">
       </div>
       <h1>Leave Application</h1>
@@ -344,7 +344,7 @@ if (!isset($_SESSION["sess_user"])) {
 
         <div class="col">
           <div class="row row-cols-1">
-            <div class="col mb-3">
+            <div class="mb-3">
               <label><b>Leave Catoregory :</b></label>
               <!-- Error message if type of absence isn't selected -->
               <span class="error"><?php echo "&nbsp;" . $absenceErr; ?></span><br />
@@ -388,14 +388,22 @@ if (!isset($_SESSION["sess_user"])) {
         <div class="row  mb-3">
           <label for="leaveDesc" class="form-label"><b>Reasons for your leave :</b></label>
           <!-- error message if reason of the leave is not given -->
-          <span class="error"><?php echo "&nbsp;" . $reasonErr ?></span>
+          <!-- <span class="error"><?php echo "&nbsp;" . $reasonErr ?></span> -->
+          <?php if (!empty($reasonErr)) { ?>
+            <span class="error"><?php echo "&nbsp;" . $reasonErr; ?></span>
+          <?php } ?>
+
           <textarea class="form-control form-control-lg" name="reason" id="leaveDesc" rows="4" placeholder="Enter Here..." required></textarea>
         </div>
 
-        <div class="mb-3">
+        <div class="row mb-2">
           <label for="fileUpload" class="form-label"><b>Upload proof document regarding your leave (PDF only):</b></label>
           <input type="file" name="fileUpload" id="fileUpload" class="form-control form-control-lg" accept=".pdf" required>
-          <span class="error"><?php echo "&nbsp;" . $fileErr; ?></span>
+          <!-- <span class="error"><?php echo "&nbsp;" . $fileErr; ?></span> -->
+          <?php if (!empty($fileErr)) { ?>
+            <span class="error"><?php echo "&nbsp;" . $fileErr; ?></span>
+          <?php } ?>
+
         </div>
 
         <div class="row  mb-3">
