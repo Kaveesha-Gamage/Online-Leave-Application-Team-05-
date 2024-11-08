@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
         <form action="forgot_password.php" method="POST">
             <div class="d-flex flex-column justify-content-between gy-4">
                 <input type="email" name="email" placeholder="Enter your registered email" class="form-control form-control-lg mb-3" required>
-                <input type="submit" name="submit" value="Send Reset Link" class="btn btn-lg btn-success">
+                <input type="submit" name="submit" value="Send Reset Link" class="btn btn-lg btn-success fw-bolder" style="background-color: #0f0283">
             </div>
         </form>
     </div>
