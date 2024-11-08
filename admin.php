@@ -44,7 +44,6 @@ if (!isset($_SESSION["sess_user"])) {
             function rejectLeave(eid, descr) {
                 let reason = prompt("Please enter the reason for rejection:");
                 if (reason) {
-                    alert(`'eid:', ${eid}, 'descr:', ${descr}, 'reason:', ${reason}`);
                     window.location.href = `updateStatusReject.php?eid=${eid}&descr=${encodeURIComponent(descr)}&reason=${encodeURIComponent(reason)}`;
                 }
             }
