@@ -84,7 +84,7 @@ if (!isset($_SESSION["sess_user"])) {
             </div>
         </nav>
 
-        <h1>Admin Panel - Employee Leave History</h1>
+        <h1>Employee Leave History</h1>
 
         <div class="mycontainer pb-4">
             <!-- Filter Form -->

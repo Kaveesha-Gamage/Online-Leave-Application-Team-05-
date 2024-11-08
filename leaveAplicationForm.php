@@ -322,7 +322,7 @@ if (!isset($_SESSION["sess_user"])) {
         <a class="navbar-brand d-none d-sm-block " href="#">Online Leave Application</a>
         <ul class="nav justify-content-end align-items-center">
           <li class="nav-item">
-            <a class="nav-link" href="myhistory.php" style="color:white;">My Leave History</a>
+            <a class="nav-link hover" href="myhistory.php" style="color:white;">My Leave History</a>
           </li>
           <li class="nav-item">
             <button id="logout" onclick="window.location.href='logout.php';" class="btn btn-sm btn-danger px-3">Logout</button>

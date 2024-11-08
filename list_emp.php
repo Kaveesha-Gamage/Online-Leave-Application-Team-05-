@@ -141,7 +141,7 @@ if (!isset($_SESSION["sess_user"])) {
                                         <td>{$row1['email']}</td>
                                         <td>{$row1['gender']}</td>
                                         <td>{$row1['phone']}</td>
-                                        <td class=\"text-center\"><a href=\"delete_emp.php?id={$row1['id']}\"><button class='btn-danger btn-sm' >Delete</button></a></td>
+                                        <td class=\"text-center\"><a href=\"delete_emp.php?id={$row1['id']}\"><button class='btn-danger btn-sm px-3' >Delete</button></a></td>
                                         
                                       </tr>";
                                 $cnt++;

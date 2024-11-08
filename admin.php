@@ -131,11 +131,11 @@ if (!isset($_SESSION["sess_user"])) {
                                                     <td>{$row['empID']}</td>
                                                     <td>{$row['ename']}</td>
                                                     <td>{$row['descr']}</td>
-                                                    <td>{$datetime1->format('Y/m/d')} <b>--</b> {$datetime2->format('Y/m/d')}</td>
+                                                    <td>{$datetime1->format('Y/m/d')} <b>-</b> {$datetime2->format('Y/m/d')}</td>
                                                     <td>{$interval->format('%a Day/s')}</td>
                                                     <td class=\"text-center\">
-                                                        <a href='updateStatusAccept.php?eid={$row['eid']}&descr=" . urlencode($row['descr']) . "'><button class='btn-success btn-sm'>Accept</button></a>
-                                                        <a href='javascript:void(0);' onclick='rejectLeave({$row['eid']}, \"" . addslashes($row['descr']) . "\");'><button class='btn-danger btn-sm mt-1 mt-md-0'>Reject</button></a>
+                                                        <a href='updateStatusAccept.php?eid={$row['eid']}&descr=" . urlencode($row['descr']) . "'><button class=' btn-success btn-sm  fw-bolder px-4'>Accept</button></a>
+                                                        <a href='javascript:void(0);' onclick='rejectLeave({$row['eid']}, \"" . addslashes($row['descr']) . "\");'><button class=' btn-danger btn-sm mt-1 mt-md-0  fw-bolder px-4'>Reject</button></a>
                                                     </td>
                                                 </tr>";
                                     $cnt++;

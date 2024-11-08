@@ -47,7 +47,7 @@ if (isset($_POST['login'])) {
         <div class="container">
             <a class="navbar-brand" href="#">Online Leave Application</a>
 
-            <a id="register" href="signup.php">Sign Up</a>
+            <a id="register" href="signup.php" class="nav-link">Sign Up</a>
         </div>
     </nav>
     <!-- header ends -->
