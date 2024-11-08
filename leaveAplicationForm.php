@@ -334,11 +334,11 @@ if (!isset($_SESSION["sess_user"])) {
       </div>
     </nav>
 
-    <h1>Leave Application</h1>
 
-    <div class="container  pb-4">
+    <div class="container border border-warning-subtle rounded-5 shadow p-sm-4 my-5 pb-4" style="border-radius: 15px;">
       <div class="alert alert-danger" id="err" role="alert" style="display: none;">
       </div>
+      <h1>Leave Application</h1>
 
       <form method="POST" onsubmit="return validateAndSubmit();">
 
@@ -373,11 +373,11 @@ if (!isset($_SESSION["sess_user"])) {
               <div class="d-flex flex-column justify-content-start">
                 <div class=" justify-content-start">
                   <label class="col" for="dates"><b>From </b></label>
-                  <input class="col form-control" type="date" name="fromdate" onchange="updateToDate()" required>
+                  <input class="col form-control form-control-lg" type="date" name="fromdate" onchange="updateToDate()" required>
                 </div>
                 <div class=" justify-content-start">
                   <label class="col" for="dates"><b>To</b></label>
-                  <input class="col form-control" type="date" name="todate" id="todate" required>
+                  <input class="col form-control form-control-lg" type="date" name="todate" id="todate" required>
                 </div>
               </div>
             </div>
@@ -389,24 +389,24 @@ if (!isset($_SESSION["sess_user"])) {
           <label for="leaveDesc" class="form-label"><b>Reasons for your leave :</b></label>
           <!-- error message if reason of the leave is not given -->
           <span class="error"><?php echo "&nbsp;" . $reasonErr ?></span>
-          <textarea class="form-control" name="reason" id="leaveDesc" rows="4" placeholder="Enter Here..." required></textarea>
+          <textarea class="form-control form-control-lg" name="reason" id="leaveDesc" rows="4" placeholder="Enter Here..." required></textarea>
         </div>
 
         <div class="mb-3">
           <label for="fileUpload" class="form-label"><b>Upload proof document regarding your leave (PDF only):</b></label>
-          <input type="file" name="fileUpload" id="fileUpload" class="form-control" accept=".pdf" required>
+          <input type="file" name="fileUpload" id="fileUpload" class="form-control form-control-lg" accept=".pdf" required>
           <span class="error"><?php echo "&nbsp;" . $fileErr; ?></span>
         </div>
 
         <div class="row  mb-3">
           <label for="adderss" class="form-label"><b> Current Address : </b></label>
-          <input type="text" class="form-control" name="Address" id="Address" placeholder="Address during the leave" Required>
+          <input type="text" class="form-control form-control-lg" name="Address" id="Address" placeholder="Address during the leave" Required>
         </div>
 
         <!--Acting arrangement details-->
         <div class="row mb-3">
           <label for="actorDepartment" class="form-label"><b> Acting employee's Department : </b></label>
-          <select name="ActorDepartment" onchange="fetchEmployeeIDs(this.value)" required class="form-select form-select">
+          <select name="ActorDepartment" onchange="fetchEmployeeIDs(this.value)" required class="form-select form-select-lg">
             <option>Select your Department</option>
             <option>Computer Science</option>
             <option>Physics</option>
@@ -420,21 +420,23 @@ if (!isset($_SESSION["sess_user"])) {
 
         <div class="row mb-3">
           <label for="actorEmployeeID" class="form-label"><b> Acting employee's Employee ID : </b></label>
-          <select class="form-control" id="ActorEmployeeID" name="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
+          <select class="form-control form-control-lg" id="ActorEmployeeID" name="ActorEmployeeID" onchange="fetchEmployeeName(this.value)" required>
             <option value="">Select Employee ID</option>
           </select>
         </div>
 
         <div class="row mb-3">
           <label for="Fullname" class="form-label"><b> Acting employee's Fullname : </b></label>
-          <input type="text" class="form-control" name="Actorfullname" id="Actorfullname" placeholder="Actor's Fullname" readonly>
+          <input type="text" class="form-control form-control-lg" name="Actorfullname" id="Actorfullname" placeholder="Actor's Fullname" readonly>
         </div>
 
         <div class="row">
-          <input type="submit" name="submit" value="Submit Leave Request" class="btn btn-success btn-lg">
+          <input type="submit" name="submit" value="Submit Leave Request" class="btn btn-primary btn-lg fw-bolder" style="background-color: #0f0283">
         </div>
       </form>
     </div>
+
+    <br>
 
 
     <!-- </div> -->
