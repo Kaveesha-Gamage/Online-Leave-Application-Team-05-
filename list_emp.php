@@ -2,7 +2,7 @@
 require_once("DBConnection.php");
 session_start();
 
-if(!isset($_SESSION["sess_user"])) {
+if (!isset($_SESSION["sess_user"])) {
     header("Location: index.php");
     exit();
 }
@@ -25,28 +25,33 @@ if(!isset($_SESSION["sess_user"])) {
     <style>
         body {
             font-family: 'Source Sans Pro', sans-serif;
-            background-color: #f4f4f4;
+            /* background-color: #f4f4f4; */
         }
+
         h1 {
             text-align: center;
             font-size: 2.5em;
             font-weight: bold;
             padding-top: 1em;
         }
+
         .mycontainer {
             width: 90%;
             margin: 1.5rem auto;
             min-height: 60vh;
         }
+
         .table-responsive {
             margin: 1.5rem auto;
         }
+
         .footer {
             background-color: #f4f4f4;
             padding: 1rem;
             text-align: center;
             color: #333;
         }
+
         .btn-danger {
             cursor: pointer;
         }
@@ -58,19 +63,19 @@ if(!isset($_SESSION["sess_user"])) {
         <div class="container-fluid">
         
             <a class="navbar-brand" href="admin.php">Online Leave Application</a> -->
-            <!-- <button class="btn-default" onclick="window.location.href='leavehist.php';">Leave History</button> </div> -->
-            <!-- <nav class="nav navbar-right">
+    <!-- <button class="btn-default" onclick="window.location.href='leavehist.php';">Leave History</button> </div> -->
+    <!-- <nav class="nav navbar-right">
             <a class="nav-link active" href="#">Active</a>
             
             </nav>
 
             <button id="logout" onclick="window.location.href='logout.php';">Logout</button> </div> -->
 
-            <!-- <ul class="nav justify-content-end">
+    <!-- <ul class="nav justify-content-end">
 
             <li class="nav-item">
                 <a class="nav-link" href="list_emp.php" style="color: #2196f3;">
-                    View Employees <span class="badge badge-pill bg-primary"><?php include('count_emp.php');?></span>
+                    View Employees <span class="badge badge-pill bg-primary"><?php include('count_emp.php'); ?></span>
                 </a>
             </li>
             <li class="nav-item">
@@ -84,51 +89,51 @@ if(!isset($_SESSION["sess_user"])) {
     </nav> -->
 
     <!--Navbar-->
-  <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
-    <div class="container justify-content-center justify-content-md-between">
-      <a class="navbar-brand d-none d-md-block " href="admin.php">Online Leave Application</a>
-      <ul class="nav justify-content-end align-items-center">
-            <li class="nav-item">
-                <a class="nav-link" href="admin.php" style="color:white;">Home</a>
-            </li>
+    <nav class="navbar header-nav navbar-expand-lg navbar-light bg-light">
+        <div class="container justify-content-center justify-content-md-between">
+            <a class="navbar-brand d-none d-md-block " href="admin.php">Online Leave Application</a>
+            <ul class="nav justify-content-end align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="list_emp.php" style="color:white;">Employees <span class="badge badge-pill" style="background-color:#2196f3;"><?php include('count_emp.php');?></span></a>
+                    <a class="nav-link" href="admin.php" style="color:white;">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="list_emp.php" style="color:white;">Employees <span class="badge badge-pill" style="background-color:#2196f3;"><?php include('count_emp.php'); ?></span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="leave_history.php" style="color:white;">Leave History</a>
                 </li>
                 <li class="nav-item">
-                <button id="logout" onclick="window.location.href='logout.php';" class="btn btn-sm btn-danger px-3">Logout</button>
+                    <button id="logout" onclick="window.location.href='logout.php';" class="btn btn-sm btn-danger px-3">Logout</button>
                 </li>
             </ul>
-    </div>
-  </nav>
+        </div>
+    </nav>
 
-<h1>Admin Panel - Registered Employees</h1>
+    <h1>Admin Panel - Registered Employees</h1>
 
     <div class="mycontainer pb-4">
 
         <div class="table-responsive">
-              <table class="table table-bordered table-hover table-striped">
-                  <thead class="align-middle ">
-                      <th>#</th>
-                      <th>Username</th>
-                      <th>Fullname</th>
-                      <th>Email</th>
-                      <th>Gender</th>
-                      <th>Contact</th>
-                      <th class="text-center">Action</th>
-                  </thead>
-                  <tbody>
+            <table class="table table-bordered table-hover table-striped">
+                <thead class="align-middle ">
+                    <th>#</th>
+                    <th>Username</th>
+                    <th>Fullname</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    <th>Contact</th>
+                    <th class="text-center">Action</th>
+                </thead>
+                <tbody>
                     <!-- loading all leave applications of the user -->
                     <?php
-                          $leaves = mysqli_query($conn,"SELECT * FROM users WHERE type = 'Employee'");
-                          if($leaves){
-                            $numrow = mysqli_num_rows($leaves);
-                            if($numrow!=0){
-                              $cnt=1;
-                              while($row1 = mysqli_fetch_array($leaves)){
-                                
+                    $leaves = mysqli_query($conn, "SELECT * FROM users WHERE type = 'Employee'");
+                    if ($leaves) {
+                        $numrow = mysqli_num_rows($leaves);
+                        if ($numrow != 0) {
+                            $cnt = 1;
+                            while ($row1 = mysqli_fetch_array($leaves)) {
+
                                 echo "<tr class=\"align-middle\">
                                         <td>$cnt</td>
                                         <td>{$row1['empID']}</td>
@@ -139,27 +144,28 @@ if(!isset($_SESSION["sess_user"])) {
                                         <td class=\"text-center\"><a href=\"delete_emp.php?id={$row1['id']}\"><button class='btn-danger btn-sm' >Delete</button></a></td>
                                         
                                       </tr>";
-                             $cnt++; }
-                            } else {
-                              echo"<tr class='text-center'><td colspan='12'>YOU DON'T HAVE ANY LEAVE HISTORY! PLEASE APPLY TO VIEW YOUR STATUS HERE!</td></tr>";
+                                $cnt++;
                             }
-                          }
-                          else{
-                            echo "Query Error : " . "SELECT descr,status FROM leaves WHERE eid='".$_SESSION['sess_eid']."'" . "<br>" . mysqli_error($conn);;
-                          }
-                      ?>
-                  </tbody>
-              </table>
-          </div>
+                        } else {
+                            echo "<tr class='text-center'><td colspan='12'>YOU DON'T HAVE ANY LEAVE HISTORY! PLEASE APPLY TO VIEW YOUR STATUS HERE!</td></tr>";
+                        }
+                    } else {
+                        echo "Query Error : " . "SELECT descr,status FROM leaves WHERE eid='" . $_SESSION['sess_eid'] . "'" . "<br>" . mysqli_error($conn);;
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <footer class="footer navbar navbar-expand-lg navbar-light bg-light" style="color:white;">
-    <div>
-    <!-- <p class="text-center">Online Leave Application</p> -->
-      <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
-    </div>
+        <div>
+            <!-- <p class="text-center">Online Leave Application</p> -->
+            <p class="text-center">©2024 DEPARTMENT OF COMPUTER SCIENCE ALL RIGHTS RESERVED</p>
+        </div>
     </footer>
 </body>
+
 </html>
 
 <?php

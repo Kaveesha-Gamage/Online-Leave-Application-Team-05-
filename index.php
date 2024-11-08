@@ -82,11 +82,11 @@ if (isset($_POST['login'])) {
                             <input class="form-control" type="password" id="password" name="password" placeholder="Enter Password" required>
                             <label for="password">Password</label>
                         </div>
-                        <input type="submit" class="btn btn-lg btn-success" name="login" value="Log In">
+                        <input type="submit" class="btn btn-lg btn-primary fw-bolder" name="login" value="Log In" style="background-color: #0f0283">
 
                     </form>
                 </div>
-                <div class="px-4 mt-4 d-flex flex-column">
+                <div class="px-4 mt-4 d-flex flex-column align-items-center">
                     <p><a href="forgot_password.php" class="text-decoration-none text-info-emphasis">Forgot Password ?</a></p>
                     <p>Don't you have an account ? <a href="signup.php" class="text-decoration-none text-info-emphasis">Signup here</a></p>
                 </div>
