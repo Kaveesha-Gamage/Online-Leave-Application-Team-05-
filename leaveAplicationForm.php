@@ -16,66 +16,54 @@ if (!isset($_SESSION["sess_user"])) {
 ?>
 
   <?php
-  $reasonErr = $absenceErr = $absencePlusReason = $ActorEmployeeID = $absence = "";
+  $fileErr = $reasonErr = $absenceErr = $absencePlusReason = $ActorEmployeeID = $absence = "";
   global $leaveApplicationValidate;
   if (isset($_POST['submit'])) {
-    if (empty($_POST['absence'])) {
-      $absenceErr = "Please select absence type";
-      $leaveApplicationValidate = false;
-    } else {
-      $arr = $_POST['absence'];
-      $absence = implode(",", $arr);
-      $leaveApplicationValidate = true;
+    $leaveApplicationValidate = true;
+    $fileErr = '';
+
+    // File upload handling
+    $uploadOk = true;
+    $filePath = "";
+
+    if (isset($_FILES['leaveFile']) && $_FILES['leaveFile']['error'] == UPLOAD_ERR_OK) {
+      $target_dir = "uploads/";
+      $filePath = $target_dir . basename($_FILES["leaveFile"]["name"]);
+      $fileType = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
+
+      // Allow only PDF files
+      if ($fileType != "pdf") {
+        echo '<script>alert("Only PDF files are allowed.")</script>';
+        $uploadOk = false;
+      } else {
+        // Move file to the target directory
+        if (!move_uploaded_file($_FILES["leaveFile"]["tmp_name"], $filePath)) {
+          echo '<script>alert("Error uploading file.")</script>';
+          $uploadOk = false;
+        }
+      }
+    } else if (isset($_FILES['leaveFile']) && $_FILES['leaveFile']['error'] != UPLOAD_ERR_NO_FILE) {
+      // Handle errors other than "no file uploaded"
+      echo '<script>alert("File upload error: ' . $_FILES['leaveFile']['error'] . '")</script>';
+      $uploadOk = false;
     }
 
-    if (empty($_POST['fromdate'])) {
-      $fromdateErr = "Please Enter starting date";
-      $leaveApplicationValidate = false;
-    } else {
-      $fromdate = mysqli_real_escape_string($conn, $_POST['fromdate']);
-      $leaveApplicationValidate = true;
-    }
+    // Save leave request if upload was successful
+    if ($leaveApplicationValidate && $uploadOk)
+      // Fetch employee details
+      $empID = $_SESSION["sess_user"]; // Updated to fetch empID from session
+    $eid_query = mysqli_query($conn, "SELECT id, email, fullname FROM users WHERE empID='" . $empID . "'");
+    $row = mysqli_fetch_array($eid_query);
 
-    if (empty($_POST['todate'])) {
-      $todateErr = "Please Enter ending date";
-      $leaveApplicationValidate = false;
-    } else {
-      $todate = mysqli_real_escape_string($conn, $_POST['todate']);
-      $leaveApplicationValidate = true;
-    }
+    // Extract employee's email and full name
+    $employeeEmail = $row['email'];
+    $employeeFullName = $row['fullname'];
 
-    $reason = mysqli_real_escape_string($conn, $_POST['reason']);
-    if (empty($reason)) {
-      $reasonErr = "Please give reason for the leave in detail";
-      $leaveApplicationValidate = false;
-    } else {
-      $absencePlusReason = $absence . " : " . $reason;
-      $leaveApplicationValidate = true;
-    }
+    // Insert leave request with file path
+    $query = "INSERT INTO leaves(eid, empID, ename, descr, fromdate, todate, ActorDepartment, ActorEmployeeID, Actorfullname, status, file_path) 
+                VALUES({$row['id']}, '{$empID}', '{$employeeFullName}', '$absencePlusReason', '$fromdate', '$todate', '$ActorDepartment', '$ActorEmployeeID', '$Actorfullname', '$status', '$filePath')";
 
-    if (empty($_POST['ActorDepartment'])) {
-      $actIDErr = "Please Enter Actor's Department";
-      $leaveApplicationValidate = false;
-    } else {
-      $ActorDepartment = mysqli_real_escape_string($conn, $_POST['ActorDepartment']);
-      $leaveApplicationValidate = true;
-    }
-
-    if (empty($_POST['ActorEmployeeID'])) {
-      $actIDErr = "Please Enter Actor's EmployeeID";
-      $leaveApplicationValidate = false;
-    } else {
-      $ActorEmployeeID = mysqli_real_escape_string($conn, $_POST['ActorEmployeeID']);
-      $leaveApplicationValidate = true;
-    }
-
-    if (empty($_POST['Actorfullname'])) {
-      $actnameErr = "Please Enter Actor's name";
-      $leaveApplicationValidate = false;
-    } else {
-      $Actorfullname = mysqli_real_escape_string($conn, $_POST['Actorfullname']);
-      $leaveApplicationValidate = true;
-    }
+    $execute = mysqli_query($conn, $query);
 
     $status = "Pending";
 
@@ -402,6 +390,12 @@ if (!isset($_SESSION["sess_user"])) {
           <!-- error message if reason of the leave is not given -->
           <span class="error"><?php echo "&nbsp;" . $reasonErr ?></span>
           <textarea class="form-control" name="reason" id="leaveDesc" rows="4" placeholder="Enter Here..." required></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="fileUpload" class="form-label"><b>Upload proof document regarding your leave (PDF only):</b></label>
+          <input type="file" name="fileUpload" id="fileUpload" class="form-control" accept=".pdf" required>
+          <span class="error"><?php echo "&nbsp;" . $fileErr; ?></span>
         </div>
 
         <div class="row  mb-3">
