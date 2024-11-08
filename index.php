@@ -86,9 +86,9 @@ if (isset($_POST['login'])) {
 
                     </form>
                 </div>
-                <div class="px-4 mt-4 d-flex flex-column justify-content-between flex-lg-row">
-                    <p><a href="forgot_password.php" class="text-decoration-none text-info-emphasis">Forgot Password?</a></p>
-                    <p>Don't you have an account? <a href="signup.php" class="text-decoration-none text-info-emphasis">Signup here</a></p>
+                <div class="px-4 mt-4 d-flex flex-column">
+                    <p><a href="forgot_password.php" class="text-decoration-none text-info-emphasis">Forgot Password ?</a></p>
+                    <p>Don't you have an account ? <a href="signup.php" class="text-decoration-none text-info-emphasis">Signup here</a></p>
                 </div>
             </div>
             <!-- rightComponent ends -->
